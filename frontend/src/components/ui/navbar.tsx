@@ -4,6 +4,7 @@ import { Menu, Mountain } from "lucide-react"
 import { Link } from "react-router-dom"
 // import { useState } from "react"
 import  { useEffect, useState } from 'react';
+import { toast } from "sonner"
 
 
 import { Button } from "@/components/ui/button"
@@ -33,6 +34,7 @@ export default function Navbar() {
         .then((response) => response.json())
         .then((data) => {
           setUser(data.user); // Set the user state with the fetched data
+          toast(`Welcome back, ${data.user.name}! 😁`)
         })
         .catch((err) => console.error("Error fetching current user:", err));
     }, []);
@@ -57,7 +59,12 @@ export default function Navbar() {
           .then((data) => setUser(data.user)); // Set the user state (will be null after logout)
         
         // Optionally, you can redirect the user to the login page
-        window.location.href = "/"; // Redirect to login page after logout
+        toast("Signed out successfully 👋")
+
+    // setTimeout(() => {
+    //   window.location.href = "/";
+    // }, 3000); 
+        
       } catch (error) {
         console.error("Error during logout:", error);
       }
@@ -65,7 +72,7 @@ export default function Navbar() {
     
 
   return (
-    <header className="flex h-16 w-full max-w-100vw items-center justify-between border-b px-4 md:px-6">
+    <header className="flex h-16 w-full max-w-100vw items-center justify-between border-0 px-4 md:px-6 bg-white/50 backdrop-blur-sm sticky top-0 z-50">
       {/* Left: Logo */}
       <div className="flex items-center">
         <Link to="/" className="flex items-center gap-2">

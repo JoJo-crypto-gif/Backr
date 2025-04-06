@@ -11,6 +11,7 @@ const campaignSchema = new mongoose.Schema({
   deadline: { type: Date }, // Optional for non-recurring
   isRecurring: { type: Boolean, default: false }, // Recurring or not
   sharecode: { type: String, unique: true, required: true }, // Unique shareable code
+  backers: { type: Number, default: 0 },
   images: { type: [String] }, // Change from single image to an array
 }, { timestamps: true });
 
