@@ -1,16 +1,18 @@
-// hooks/useLenis.ts
 import { useEffect, useRef } from 'react'
 import Lenis from '@studio-freight/lenis'
+import { useAnimationFrame } from 'framer-motion'
 
 export const useLenis = () => {
   const lenisRef = useRef<Lenis | null>(null)
 
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.5,
-      easing: (t: number) => 1 - Math.pow(1 - t, 4), // Super smooth
+      lerp: 0.04, // lower = snappier, higher = smoother
       smoothWheel: true,
-      // smoothTouch: true,
+      duration: 1.2,
+      // smooth: true,
+      // smoothTouch: false,
+      easing: (t) => 1 - Math.pow(1 - t, 3),
     })
 
     lenisRef.current = lenis
@@ -26,6 +28,11 @@ export const useLenis = () => {
       lenis.destroy()
     }
   }, [])
+
+  // Ensure framer-motion updates along with Lenis
+  useAnimationFrame((time) => {
+    lenisRef.current?.raf(time)
+  })
 
   return lenisRef
 }

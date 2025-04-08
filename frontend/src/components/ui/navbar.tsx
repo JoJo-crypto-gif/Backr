@@ -88,9 +88,9 @@ export default function Navbar() {
             <NavigationMenuItem>
               <NavigationMenuTrigger>Products</NavigationMenuTrigger>
               <NavigationMenuContent>
-                <div className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2">
+                <div className="grid w-full gap-3 md:w-[500px] md:grid-cols-2 bg-white/80 backdrop-blur-sm ">
                   <NavigationMenuLink asChild>
-                    <Link to="#" className="flex flex-col gap-1 rounded-md p-3 hover:bg-accent">
+                    <Link to="#" className="flex flex-col gap-1 rounded-md p-3 hover:bg-accent w-full">
                       <div className="font-medium">Product One</div>
                       <div className="text-sm text-muted-foreground">Description for product one goes here</div>
                     </Link>
@@ -119,7 +119,7 @@ export default function Navbar() {
             <NavigationMenuItem>
               <NavigationMenuTrigger>Services</NavigationMenuTrigger>
               <NavigationMenuContent>
-                <div className="grid w-[400px] gap-3 p-4">
+                <div className="grid w-[400px] gap-3 p-4 bg-white/80 backdrop-blur-sm">
                   <NavigationMenuLink asChild>
                     <Link to="#" className="flex flex-col gap-1 rounded-md p-3 hover:bg-accent">
                       <div className="font-medium">Consulting</div>
@@ -171,7 +171,7 @@ export default function Navbar() {
               </NavigationMenuTrigger>
 
               <NavigationMenuContent>
-                <div className="grid w-[auto] gap-3 p-4">
+                <div className="grid w-[auto] gap-3 p-4 bg-white/80 backdrop-blur-sm">
                   <NavigationMenuLink asChild>
                     <Link
                       to="/dashboard"
