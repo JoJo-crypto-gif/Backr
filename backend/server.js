@@ -30,7 +30,7 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: true, // Set to true in production
+    secure: false, // Set to true in production
     maxAge: 24 * 60 * 60 * 1000 // 1 day
   }
 }));
@@ -103,6 +103,7 @@ app.get('/logout', (req, res) => {
 
 // Get current user session
 app.get('/current_user', (req, res) => {
+  console.log('User:', req.user);
   if (req.user) {
     res.json({ user: req.user });
   } else {
