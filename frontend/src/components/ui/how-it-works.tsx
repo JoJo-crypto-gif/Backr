@@ -113,11 +113,11 @@ export default function HowItWorksCarousel() {
     scrollToSlide(newIndex)
   }
 
-  // 🌀 AutoPlay Effect
+  // AutoPlay Effect
   useEffect(() => {
     autoplayRef.current = setInterval(() => {
       handleNext()
-    }, 2000) // 4 interval
+    }, 2000) 
 
     return () => {
       if (autoplayRef.current) clearInterval(autoplayRef.current)

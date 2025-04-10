@@ -68,7 +68,6 @@ router.get('/all', async (req, res) => {
   }
 });
 
-// Get a specific campaign by ID
 // Get a specific campaign by campaignId
 router.get('/:campaignId', async (req, res) => {
   const { campaignId } = req.params;
@@ -76,7 +75,7 @@ router.get('/:campaignId', async (req, res) => {
   try {
     // Use campaignId instead of _id for querying
     const campaign = await Campaign.findOne({ campaignId })
-      .populate('creatorId', 'name avatar bio address') // Assuming 'creatorId' is the reference to User model
+      .populate('creatorId', 'name avatar bio address')
       .exec();
 
     if (!campaign) {
@@ -88,8 +87,6 @@ router.get('/:campaignId', async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 });
-
-
 
 // Get a specific campaign by sharecode
 router.get('/campaign/:sharecode', async (req, res) => {
@@ -105,7 +102,6 @@ router.get('/campaign/:sharecode', async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 });
-
 
 // Get campaigns by user ID
 router.get('/user/:userId', async (req, res) => {

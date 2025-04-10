@@ -6,10 +6,10 @@ import LoginPage from "./pages/LoginPage";
 import Campaigns from './pages/CampaignsPage';
 import CampaignDetails from './pages/CampaignDetailsPage';
 import { Toaster } from "@/components/ui/sonner";
-import { useLenis } from "./hooks/lenis"; // ✅ Import the hook
+import { useLenis } from "./hooks/lenis";
 
 function App() {
-  useLenis(); // ✅ Enable global smooth scrolling
+  useLenis(); 
 
   return (
     <BrowserRouter>

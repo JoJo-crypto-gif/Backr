@@ -101,7 +101,6 @@ export default function TestimonialsScroll() {
     },
   ]
 
-  // Split testimonials into two rows
   const firstRow = testimonials.slice(0, 4)
   const secondRow = testimonials.slice(4)
 

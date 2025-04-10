@@ -10,8 +10,6 @@ export const useLenis = () => {
       lerp: 0.04, // lower = snappier, higher = smoother
       smoothWheel: true,
       duration: 1.2,
-      // smooth: true,
-      // smoothTouch: false,
       easing: (t) => 1 - Math.pow(1 - t, 3),
     })
 

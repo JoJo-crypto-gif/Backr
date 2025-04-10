@@ -77,7 +77,6 @@ export default function Footer() {
     // Handle newsletter signup logic here
     console.log("Email submitted:", email)
     setEmail("")
-    // You would typically call an API here to handle the subscription
   }
 
   return (

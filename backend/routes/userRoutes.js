@@ -1,5 +1,4 @@
 // routes/userRoutes.js
-
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
@@ -20,7 +19,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Update user by ID (name, bio, address, avatar)
+// Update user by ID
 router.put('/update/:id', upload.single('avatar'), async (req, res) => {
   try {
     const { name, bio, address } = req.body;  // Extract name, bio, and address

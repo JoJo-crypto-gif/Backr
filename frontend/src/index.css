@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 body{
-  justify-content: center; /* Center content horizontally */
+  justify-content: center;
   align-items: center;
 }
 
@@ -20,24 +20,10 @@ body{
   animation: fade-in 0.8s ease-out;
 }
 
-/* src/index.css or wherever your Tailwind is configured */
 .scrollbar-hide {
-  -ms-overflow-style: none; /* IE & Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 .scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  display: none;
 }
-
-
-/* .fade-in-on-scroll {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
-
-.fade-in-on-scroll.visible {
-  opacity: 1;
-  transform: translateY(0);
-  animation: fade-in 0.8s ease-out;
-} */

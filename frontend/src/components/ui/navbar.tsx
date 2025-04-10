@@ -2,7 +2,6 @@
 
 import { Menu, Mountain } from "lucide-react"
 import { Link } from "react-router-dom"
-// import { useState } from "react"
 import  { useEffect, useState } from 'react';
 import { toast } from "sonner"
 
@@ -30,7 +29,7 @@ export default function Navbar() {
     // Fetch the current logged-in user
     fetch("http://localhost:5000/current_user", {
       method: "GET",
-      credentials: "include", // Ensure cookies are sent with the request (if needed for sessions)
+      credentials: "include",
     })
       .then((response) => response.json())
       .then((data) => {
@@ -53,7 +52,7 @@ export default function Navbar() {
         // Send request to logout on the backend
         await fetch("http://localhost:5000/logout", {
           method: "GET",
-          credentials: "include", // Ensure cookies are sent with the request (if needed for sessions)
+          credentials: "include",
         });
     
         // Reset user state in frontend (if you're managing it with useState)
@@ -69,17 +68,11 @@ export default function Navbar() {
         
         // Optionally, you can redirect the user to the login page
         toast("Signed out successfully 👋")
-
-    // setTimeout(() => {
-    //   window.location.href = "/";
-    // }, 3000); 
         
       } catch (error) {
         console.error("Error during logout:", error);
       }
     };
-
-      // If the user is still being fetched (loading state), show nothing or a loading indicator
   if (loading) {
     return <div>Loading...</div>;
   }

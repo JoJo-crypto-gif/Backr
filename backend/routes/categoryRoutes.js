@@ -2,7 +2,6 @@
 const express = require('express');
 const router = express.Router();
 
-// List of predefined categories
 const categories = [
   { name: 'Technology', description: 'All technology-related campaigns.' },
   { name: 'Education', description: 'Campaigns supporting education.' },
@@ -10,7 +9,6 @@ const categories = [
   { name: 'Art', description: 'Campaigns for art and creativity.' },
   { name: 'Environment', description: 'Campaigns to protect the environment.' },
   { name: 'Business', description: 'Business and startup-related campaigns.' },
-  // Add more as needed
 ];
 
 // Get all categories
