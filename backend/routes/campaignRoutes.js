@@ -1,36 +1,38 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
-const { v4: uuidv4 } = require('uuid'); // To generate unique IDs
+const { v4: uuidv4 } = require('uuid');
 const Campaign = require('../models/campaign');
 
 const router = express.Router();
 
-// Multer setup for image uploads (max 3 images)
+// Multer setup for image uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Save images to the "uploads" folder
+    cb(null, 'uploads/');
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname); // Unique file names
+    cb(null, Date.now() + '-' + file.originalname);
   }
 });
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 } // 5MB max per file
-}).array('images', 3); // Accept up to 3 images
+  limits: { fileSize: 5 * 1024 * 1024 }
+}).array('images', 3); // max 3 images
 
-// Create a new campaign with images
+// Create a new campaign
 router.post('/create', upload, async (req, res) => {
   try {
-    const { creatorId, title, description, category, goalamt, deadline, isRecurring } = req.body;
+    const { creatorId, title, description, category } = req.body;
 
-    // Generate unique campaignId and sharecode
+    // Convert and handle types
+    const isRecurring = req.body.isRecurring === 'true';
+    const goalamt = isRecurring ? null : Number(req.body.goalamt);
+    const deadline = isRecurring ? null : new Date(req.body.deadline);
+
     const campaignId = uuidv4();
-    const sharecode = uuidv4().slice(0, 8); // Short shareable code
-
-    // Get uploaded image URLs
+    const sharecode = uuidv4().slice(0, 8);
     const imageUrls = req.files.map(file => `http://localhost:5000/uploads/${file.filename}`);
 
     const newCampaign = new Campaign({
@@ -39,11 +41,12 @@ router.post('/create', upload, async (req, res) => {
       title,
       description,
       category,
-      goalamt: isRecurring ? null : goalamt, // If recurring, no goal amount
-      deadline: isRecurring ? null : deadline, // If recurring, no deadline
+      goalamt,
+      deadline,
       isRecurring,
       sharecode,
-      images: imageUrls // Store image URLs in DB
+      story,
+      images: imageUrls
     });
 
     await newCampaign.save();
@@ -56,15 +59,40 @@ router.post('/create', upload, async (req, res) => {
 // Get all campaigns
 router.get('/all', async (req, res) => {
   try {
-    const campaigns = await Campaign.find();
+    const campaigns = await Campaign.find()
+      .populate('creatorId', 'name avatar bio')
+      .exec();
     res.status(200).json({ success: true, campaigns });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
 });
 
+// Get a specific campaign by ID
+// Get a specific campaign by campaignId
+router.get('/:campaignId', async (req, res) => {
+  const { campaignId } = req.params;
+
+  try {
+    // Use campaignId instead of _id for querying
+    const campaign = await Campaign.findOne({ campaignId })
+      .populate('creatorId', 'name avatar bio address') // Assuming 'creatorId' is the reference to User model
+      .exec();
+
+    if (!campaign) {
+      return res.status(404).json({ success: false, message: 'Campaign not found' });
+    }
+
+    res.status(200).json({ success: true, campaign });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+
+
 // Get a specific campaign by sharecode
-router.get('/:sharecode', async (req, res) => {
+router.get('/campaign/:sharecode', async (req, res) => {
   try {
     const campaign = await Campaign.findOne({ sharecode: req.params.sharecode });
 
@@ -78,55 +106,43 @@ router.get('/:sharecode', async (req, res) => {
   }
 });
 
-// Get all campaigns
-router.get('/all', async (req, res) => {
-  try {
-    const campaigns = await Campaign.find();
-    res.status(200).json({ success: true, campaigns });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
 
-
-// Get all campaigns for a specific user when logged in using thier userID
+// Get campaigns by user ID
 router.get('/user/:userId', async (req, res) => {
   try {
-    const userId = req.params.userId;
-    const campaigns = await Campaign.find({ creatorId: userId });
+    const campaigns = await Campaign.find({ creatorId: req.params.userId });
     res.status(200).json({ success: true, campaigns });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
 });
 
-// Update a campaign (by campaignId or sharecode) - We'll use campaignId here
+// Update a campaign
 router.put('/update/:campaignId', upload, async (req, res) => {
   try {
     const { campaignId } = req.params;
     const updates = req.body;
-    
-    // If there are new images uploaded, update the images array
+
     if (req.files && req.files.length > 0) {
       const imageUrls = req.files.map(file => `http://localhost:5000/uploads/${file.filename}`);
       updates.images = imageUrls;
     }
-    
+
     const updatedCampaign = await Campaign.findOneAndUpdate({ campaignId }, updates, { new: true });
     if (!updatedCampaign) {
       return res.status(404).json({ success: false, message: 'Campaign not found' });
     }
+
     res.status(200).json({ success: true, campaign: updatedCampaign });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
 });
 
-// Delete a campaign (by campaignId)
+// Delete a campaign
 router.delete('/delete/:campaignId', async (req, res) => {
   try {
-    const { campaignId } = req.params;
-    const deletedCampaign = await Campaign.findOneAndDelete({ campaignId });
+    const deletedCampaign = await Campaign.findOneAndDelete({ campaignId: req.params.campaignId });
     if (!deletedCampaign) {
       return res.status(404).json({ success: false, message: 'Campaign not found' });
     }
@@ -135,6 +151,5 @@ router.delete('/delete/:campaignId', async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 });
-
 
 module.exports = router;

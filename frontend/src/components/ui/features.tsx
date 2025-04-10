@@ -61,8 +61,8 @@ const features = [
 
 export default function Features() {
   return (
-    <section className="w-full py-2 md:py-4 lg:py-10 bg-muted/50">
-      <div className="w-full px-4 md:px-6">
+    <section className="w-full py-2 md:py-4 lg:py-10 bg-muted/50 ">
+      <div className="container px-4 md:px-6 items-center justify-center m-auto">
       <motion.div
           className="flex flex-col items-center justify-center space-y-4 text-center"
           initial="hidden"

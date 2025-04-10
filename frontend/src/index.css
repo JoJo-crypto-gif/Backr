@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+body{
+  justify-content: center; /* Center content horizontally */
+  align-items: center;
+}
+
 @keyframes fade-in {
   from {
     opacity: 0;

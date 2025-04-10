@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button"
 export default function CTASection() {
   return (
     <section className="w-full py-12 md:py-20">
-      <div className="w-full px-4 md:px-6">
+      <div className="conatiner px-4 md:px-6 m-auto">
         <div className="relative overflow-hidden bg-zinc-800 rounded-3xl p-8 md:p-12 lg:p-16">
           {/* Concentric circles pattern */}
           <div className="absolute inset-0 pointer-events-none">

@@ -24,8 +24,8 @@ export default function InlineFilter() {
   const hasActiveFilters = searchQuery || category || status || funding || sortBy !== "popular"
 
   return (
-    <div className="w-full bg-background py-4 border-b">
-      <div className="container px-4 md:px-6">
+    <div className="w-full bg-background py-4">
+      <div className="container px-4 md:px-6 m-auto">
         <div className="flex flex-col md:flex-row items-start md:items-center gap-4 w-full">
           {/* Search Input */}
           <div className="relative flex-grow max-w-md">

@@ -1,5 +1,6 @@
 import Navbar from "../components/ui/navbar"; // if you're inside /pages/
-import InlineFilter from "../components/ui/filter"; 
+import InlineFilter from "../components/ui/inline-filter"; 
+import CampaignGrid from "../components/ui/campaign-grid";
 
 
 const Campaigns = () => {
@@ -7,6 +8,7 @@ const Campaigns = () => {
           <div>
              <Navbar />
              <InlineFilter />
+             <CampaignGrid />
 
           </div>
     );
