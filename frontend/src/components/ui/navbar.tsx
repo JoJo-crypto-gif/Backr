@@ -24,20 +24,29 @@ export default function Navbar() {
     name: string;
   }
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true); // Corrected loading state
   
-    useEffect(() => {
-      // Fetch the current logged-in user
-      fetch("http://localhost:5000/current_user", {
-        method: "GET",
-        credentials: "include", // Make sure cookies are sent with the request (if needed for sessions)
-      })
-        .then((response) => response.json())
-        .then((data) => {
+  useEffect(() => {
+    // Fetch the current logged-in user
+    fetch("http://localhost:5000/current_user", {
+      method: "GET",
+      credentials: "include", // Ensure cookies are sent with the request (if needed for sessions)
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.user) {
           setUser(data.user); // Set the user state with the fetched data
-          toast(`Welcome back, ${data.user.name}! 😁`)
-        })
-        .catch((err) => console.error("Error fetching current user:", err));
-    }, []);
+          toast("Signed in successfully 😁")
+        } else {
+          setUser(null); // Ensure user is null if no user is logged in
+        }
+        setLoading(false); // Set loading to false after session check is complete
+      })
+      .catch((err) => {
+        console.error("Error fetching current user:", err);
+        setLoading(false); // Make sure loading stops even if there's an error
+      });
+  }, []);
 
     const handleLogout = async () => {
       try {
@@ -69,10 +78,15 @@ export default function Navbar() {
         console.error("Error during logout:", error);
       }
     };
+
+      // If the user is still being fetched (loading state), show nothing or a loading indicator
+  if (loading) {
+    return <div>Loading...</div>;
+  }
     
 
   return (
-    <header className="flex h-16 w-full max-w-100vw items-center justify-between border-0 px-4 md:px-6 bg-white/50 backdrop-blur-sm sticky top-0 z-50">
+    <header className="flex h-16 w-full max-w-full items-center justify-between border-0 px-4 md:px-6 bg-white/50 backdrop-blur-sm sticky top-0 z-50">
       {/* Left: Logo */}
       <div className="flex items-center">
         <Link to="/" className="flex items-center gap-2">
@@ -86,12 +100,12 @@ export default function Navbar() {
         <NavigationMenu>
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>Products</NavigationMenuTrigger>
+              <NavigationMenuTrigger>Campaigns</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <div className="grid w-full gap-3 md:w-[500px] md:grid-cols-2 bg-white/80 backdrop-blur-sm ">
                   <NavigationMenuLink asChild>
-                    <Link to="#" className="flex flex-col gap-1 rounded-md p-3 hover:bg-accent w-full">
-                      <div className="font-medium">Product One</div>
+                    <Link to="/campaigns" className="flex flex-col gap-1 rounded-md p-3 hover:bg-accent w-full">
+                      <div className="font-medium">Browse Campaings</div>
                       <div className="text-sm text-muted-foreground">Description for product one goes here</div>
                     </Link>
                   </NavigationMenuLink>

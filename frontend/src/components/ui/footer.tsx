@@ -81,8 +81,8 @@ export default function Footer() {
   }
 
   return (
-<footer className="w-full bg-muted/30 pt-16 pb-8">
-  <div className="w-full px-4 md:px-6">
+<footer className="w-full py-12 md:py-24 lg:py-32 overflow-hidden animate-fade-in">
+  <div className="container px-4 md:px-6 m-auto">
     <div className="grid gap-10 md:grid-cols-2 lg:gap-16">
       {/* Left Side: Newsletter Signup */}
       <div className="space-y-6">

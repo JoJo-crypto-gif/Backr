@@ -2,4 +2,8 @@
 
 body {
   font-family: 'Outfit', sans-serif;
+  justify-content: center; /* Center content horizontally */
+  align-items: center;
+  width: 100%;
+  border: 1px solid black;
 }

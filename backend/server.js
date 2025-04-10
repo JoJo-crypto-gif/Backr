@@ -6,9 +6,12 @@ const session = require('express-session');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const cors = require('cors');
+const multer = require('multer'); // Import multer
 
-const User = require('./models/User'); // User model
+const User = require('./models/user'); // User model
 const campaignRoutes = require('./routes/campaignRoutes'); // Campaign routes
+const userRoutes = require('./routes/userRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
 
 const app = express();
 const PORT = 5000;
@@ -20,18 +23,25 @@ app.use(cors({
 }));
 
 // Middleware to parse JSON and URL-encoded data
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Increase payload size limits
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
 
 // Session middleware
+const MongoStore = require('connect-mongo');
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGO_URI,
+    collectionName: 'sessions',
+  }),
   cookie: {
     httpOnly: true,
-    secure: true, // Set to true in production
-    maxAge: 24 * 60 * 60 * 1000 // 1 day
+    secure: false, // true in production with https
+    maxAge: 24 * 60 * 60 * 1000
   }
 }));
 
@@ -76,8 +86,22 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+// Setup multer for handling file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, 'uploads', 'avatar')); // Upload directory
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // Unique filename
+  }
+});
+
+const upload = multer({ storage: storage });
+
 // Routes
 app.use('/campaigns', campaignRoutes);
+app.use('/users', userRoutes);
+app.use('/categories', categoryRoutes);
 
 // Root route
 app.get('/', (req, res) => {
@@ -87,7 +111,7 @@ app.get('/', (req, res) => {
 // Google OAuth routes
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-app.get('/auth/google/callback', 
+app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: 'http://localhost:5173/login' }),
   (req, res) => {
     res.redirect('http://localhost:5173');
@@ -103,6 +127,7 @@ app.get('/logout', (req, res) => {
 
 // Get current user session
 app.get('/current_user', (req, res) => {
+  console.log('User:', req.user);
   if (req.user) {
     res.json({ user: req.user });
   } else {

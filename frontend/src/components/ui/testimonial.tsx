@@ -24,7 +24,7 @@ const Testimonial = ({ content, author, role, avatar, rating = 5 }: TestimonialP
     >
       <div className="flex space-x-1 mb-4">
         {Array.from({ length: rating }).map((_, i) => (
-          <Star key={i} className="h-5 w-5 fill-primary text-primary" />
+          <Star key={i} className="h-5 w-5 fill-black text-white" />
         ))}
       </div>
       <p className="text-muted-foreground mb-6">{content}</p>
@@ -48,7 +48,7 @@ export default function TestimonialsScroll() {
       author: "Sarah Johnson",
       role: "Serial Killer",
       avatar: avatarSvg,
-      rating: 5,
+      rating: 3,
     },
     {
       content: "The analytics tools helped me understand my audience and optimize my campaign strategy.",
@@ -109,7 +109,7 @@ export default function TestimonialsScroll() {
 
   return (
     <section className="w-full py-2 md:py-2 lg:py-2 overflow-hidden bg-muted/30">
-      <div className="w-full px-4 md:px-6 mb-10">
+      <div className="container px-4 md:px-6 mb-10 m-auto">
         <div className="flex flex-col items-center justify-center space-y-4 text-center">
           <div className="space-y-2">
             <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight">What Our Users Say</h2>
