@@ -233,8 +233,8 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
 
           <TabsContent value="story" className="pt-6">
           <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 prose max-w-none">
-              <div className="whitespace-pre-line">{campaign.story}</div>
+            <div className="lg:col-span-2 prose max-w-none break-words">
+              <div className="whitespace-pre-line break-words">{campaign.story}</div>
             </div>
 
             <div>

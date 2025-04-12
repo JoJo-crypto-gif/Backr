@@ -6,6 +6,8 @@ frontend/build/
 
 # Ignore backend build
 backend/build/
+backend/uploads/
+uploads/
 
 # Ignore environment files
 .env

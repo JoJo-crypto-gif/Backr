@@ -24,7 +24,7 @@ const upload = multer({
 // Create a new campaign
 router.post('/create', upload, async (req, res) => {
   try {
-    const { creatorId, title, description, category } = req.body;
+    const { creatorId, title, description, category, story } = req.body;
 
     // Convert and handle types
     const isRecurring = req.body.isRecurring === 'true';

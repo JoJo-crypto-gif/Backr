@@ -5,7 +5,9 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import Campaigns from './pages/CampaignsPage';
 import CampaignDetails from './pages/CampaignDetailsPage';
-
+import DashboardPage from './pages/dashboard/index';
+import NewCampaignPage from './pages/dashboard/newCampaign';
+import CampaignsTable from './pages/dashboard/campaigns';
 import { Toaster } from "@/components/ui/sonner";
 import { useLenis } from "./hooks/lenis";
 
@@ -19,7 +21,10 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/campaigns" element={<Campaigns />} />
         <Route path="/campaigns/:id" element={<CampaignDetails />} />
-      </Routes>
+        <Route path='/dashboard' element={<DashboardPage/>} />
+        <Route path='/dashboard/new-campaign' element={<NewCampaignPage/>} />
+        <Route path='/dashboard/campaigns' element={<CampaignsTable />} />
+       </Routes>
       <Toaster />
     </BrowserRouter>
   );
