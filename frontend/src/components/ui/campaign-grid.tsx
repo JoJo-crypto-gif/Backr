@@ -6,7 +6,6 @@ import { Clock, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import axios from "axios"
-// import loginImage from "../../assets/images/login.jpg"
 
 interface CampaignProps {
   id: string;
@@ -26,7 +25,7 @@ const CampaignCard = ({ campaign }: { campaign: CampaignProps }) => {
   const percentFunded = Math.min(Math.round((campaign.raisedAmount / campaign.goalAmount) * 100), 100)
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-lg border bg-card text-card-foreground shadow-sm transition-all hover:shadow-md">
+    <div className="flex flex-col overflow-hidden rounded-lg border bg-gray-50 text-card-foreground shadow-sm transition-all hover:shadow-md">
       <div className="relative aspect-[16/9] overflow-hidden">
       <img
         src={
@@ -81,7 +80,7 @@ const CampaignCard = ({ campaign }: { campaign: CampaignProps }) => {
 }
 
 export default function CampaignGrid() {
-  const [visibleCampaigns, setVisibleCampaigns] = useState(10)
+  const [visibleCampaigns, setVisibleCampaigns] = useState(12)
   const [isLoading, setIsLoading] = useState(false)
   const [campaigns, setCampaigns] = useState<CampaignProps[]>([])
 
@@ -178,15 +177,15 @@ export default function CampaignGrid() {
 
         {hasMoreCampaigns && (
           <div className="flex justify-center mt-12">
-            <Button
-              onClick={loadMoreCampaigns}
-              disabled={isLoading}
-              className="min-w-[200px]"
-              variant="outline"
-              size="lg"
-            >
-              {isLoading ? "Loading..." : "View More Campaigns"}
-            </Button>
+        <Button
+          onClick={loadMoreCampaigns}
+          disabled={isLoading}
+          className="min-w-[200px] cursor-pointer bg-gray-50 shadow-sm transition-all hover:shadow-md hover:scale-105  duration-500" // Added cursor-pointer class
+          variant="outline"
+          size="lg"
+        >
+          {isLoading ? "Loading..." : "View More Campaigns"}
+        </Button>
           </div>
         )}
       </div>

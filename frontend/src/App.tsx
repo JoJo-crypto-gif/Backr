@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import Campaigns from './pages/CampaignsPage';
 import CampaignDetails from './pages/CampaignDetailsPage';
+
 import { Toaster } from "@/components/ui/sonner";
 import { useLenis } from "./hooks/lenis";
 

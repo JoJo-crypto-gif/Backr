@@ -17,7 +17,7 @@ const Testimonial = ({ content, author, role, avatar, rating = 5 }: TestimonialP
 
   return (
     <div
-      className="flex-shrink-0 w-[300px] md:w-[350px] p-6 mx-4 bg-card rounded-xl shadow-sm border"
+      className="flex-shrink-0 w-[300px] md:w-[350px] p-6 mx-4 bg-gray-50 rounded-xl shadow-sm border"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{ animationPlayState: isHovered ? "paused" : "running" }}

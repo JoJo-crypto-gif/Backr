@@ -144,9 +144,9 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
         </div>
 
         {/* Right column - Info */}
-        <div className="space-y-6">
+        <div className="space-y-6 bg-gray-100 border pt-4 px-5 rounded-2xl">
           <div>
-            <div className="inline-block bg-[rgba(107,114,128,0.43)] text-black text-sm px-3 py-1 rounded-full mb-3">
+            <div className="inline-block bg-[rgba(107,114,128,0.43)] text-primary-fo text-sm px-3 py-1 rounded-full mb-3">
               {campaign.category}
             </div>
             <h1 className="text-2xl md:text-3xl font-bold">{campaign.title}</h1>
@@ -169,7 +169,7 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
           </div>
 
           {/* Progress */}
-          <div className="bg-card rounded-lg border p-4 space-y-4">
+          <div className="bg-gray-100 rounded-lg p-4 space-y-4">
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span className="text-2xl font-bold">
@@ -195,8 +195,8 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
               </div>
             </div>
 
-            <Button className="w-full bg-gray-900 hover:bg-black transition-colors text-white" size="lg">
-              Back this project
+            <Button className="w-full bg-gray-700 hover:bg-gray-800 text-white rounded shadow-sm transition-all hover:shadow-md duration-300 cursor-pointer" size="lg">
+              Back this campaign
             </Button>
 
             <div className="flex justify-between pt-2">
@@ -254,7 +254,7 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
                     </div>
                   </div>
                   <p className="text-sm text-muted-foreground">{campaign.creatorBio}</p>
-                  <Button variant="outline" className="w-full mt-4">
+                  <Button variant="outline" className="w-full mt-4 bg-gray-700 hover:bg-gray-800 text-white rounded shadow-sm transition-all hover:shadow-md duration-300 cursor-pointer">
                     Contact creator
                   </Button>
                 </div>

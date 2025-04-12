@@ -38,8 +38,8 @@ export default function Hero() {
         <Button size="lg" className="gap-1">
           Start a Campaign <ArrowRight className="h-4 w-4" />
         </Button>
-        <Button size="lg" variant="outline">
-          Explore Projects
+        <Button size="lg" variant="outline" className="border bg-gray-50 cursor-pointer hover:shadow">
+          Explore Campaigns
         </Button>
       </div>
       <div className="grid grid-cols-1 gap-4 pt-8 sm:grid-cols-3">

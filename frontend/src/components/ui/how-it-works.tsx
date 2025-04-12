@@ -20,7 +20,7 @@ interface StepProps {
 
 const Step = ({ number, icon, title, description, image }: StepProps) => (
   <div className="min-w-[90%] sm:min-w-full px-4 md:px-8 snap-center transition-transform duration-300">
-    <div className="overflow-hidden rounded-xl bg-card shadow">
+    <div className="overflow-hidden rounded-xl bg-gray-50 shadow border">
       <div className="relative h-[250px] sm:h-[300px] md:h-[350px] w-full">
         <img
           src={image}

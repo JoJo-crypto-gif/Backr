@@ -108,7 +108,7 @@ export default function Features() {
             <motion.div
               key={index}
               variants={fadeInUp}
-              className="motion-safe:will-change-transform flex flex-col items-center text-center p-6 space-y-4 rounded-lg border bg-card text-card-foreground shadow-sm transition-all hover:shadow-md mx-4"
+              className="motion-safe:will-change-transform flex flex-col items-center text-center p-6 space-y-4 rounded-lg border bg-gray-50 text-card-foreground shadow-sm transition-all hover:shadow-md mx-4"
             >
               <div className="p-3 rounded-full bg-primary/10 text-primary">
                 {feature.icon}
