@@ -44,50 +44,53 @@ import {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button
-            className="w-full bg-gray-700 hover:bg-gray-800 text-white rounded shadow-sm"
+            className="w-full bg-gray-700 hover:bg-gray-800 text-white rounded shadow-sm cursor-pointer"
             size="lg"
           >
             Back this campaign
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-md">
+        <DialogContent className="sm:max-w-md bg-gray-50">
           <DialogHeader>
             <DialogTitle>Donate to this campaign</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <Label>Name</Label>
+              <Label className="mb-2">Name</Label>
               <Input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Optional"
+                className="min-h-10"
               />
             </div>
             <div>
-              <Label>Email</Label>
+              <Label className="mb-2">Email</Label>
               <Input
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 type="email"
                 placeholder="Enter your email"
+                className="min-h-10"
                 required
               />
             </div>
             <div>
-              <Label>Amount (₦)</Label>
+              <Label className="mb-2">Amount (GHS)</Label>
               <Input
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 type="number"
                 min="100"
                 placeholder="e.g. 5000"
+                className="min-h-10"
                 required
               />
             </div>
           </div>
           <DialogFooter>
-            <Button onClick={handleSubmit} className="w-full">
-              Proceed to Paystack
+            <Button onClick={handleSubmit} className="w-full bg-gray-700 hover:bg-gray-800 text-white rounded shadow-sm cursor-pointer">
+              Proceed to payment
             </Button>
           </DialogFooter>
         </DialogContent>
