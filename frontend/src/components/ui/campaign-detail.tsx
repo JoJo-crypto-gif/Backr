@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import {
   ArrowLeft,
@@ -11,6 +9,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import axios from "axios"
+import DonationModal from "./donation-modal"
 
 interface CampaignDetailProps {
   campaignId?: string
@@ -42,8 +42,7 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
             daysLeft: Math.max(
               0,
               Math.floor(
-                (new Date(raw.deadline).getTime() - Date.now()) /
-                  (1000 * 60 * 60 * 24)
+                (new Date(raw.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
               )
             )
           }
@@ -89,10 +88,35 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
     )
   }
 
+  // Calculate percentage funded
   const percentFunded = Math.min(
     Math.round((campaign.raisedAmount / campaign.goalAmount) * 100),
     100
   )
+
+  // Function to handle donation via Paystack
+  const handleDonate = async () => {
+    // For now, we use a prompt to get donation amount
+    const donation = prompt("Enter your donation amount (in Naira):")
+    if (!donation) return
+
+    // In a real app, use the logged-in user's email here
+    const donorEmail = "user@example.com"
+
+    try {
+      const response = await axios.post("http://localhost:5000/api/payments/initialize", {
+        email: donorEmail,
+        amount: Number(donation),
+        campaignId: campaign.campaignId || campaign._id // adapt based on your data
+      })
+
+      // Redirect to the Paystack checkout page
+      window.location.href = response.data.url
+    } catch (error) {
+      console.error("Error initializing payment:", error)
+      alert("There was an error starting your payment. Please try again.")
+    }
+  }
 
   return (
     <div className="px-4 md:px-6 py-8 md:py-12 container m-auto">
@@ -125,9 +149,7 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
                   <div
                     key={idx}
                     className={`relative h-20 w-20 flex-shrink-0 cursor-pointer rounded-md border-2 ${
-                      selectedImage === img
-                        ? "border-primary"
-                        : "border-transparent"
+                      selectedImage === img ? "border-primary" : "border-transparent"
                     }`}
                     onClick={() => setSelectedImage(img)}
                   >
@@ -195,9 +217,9 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
               </div>
             </div>
 
-            <Button className="w-full bg-gray-700 hover:bg-gray-800 text-white rounded shadow-sm transition-all hover:shadow-md duration-300 cursor-pointer" size="lg">
-              Back this campaign
-            </Button>
+            {/* Donation button to trigger donation flow */}
+<DonationModal campaignId={campaign.campaignId || campaign._id} />
+
 
             <div className="flex justify-between pt-2">
               <Button variant="ghost" size="sm" className="text-muted-foreground">
@@ -232,34 +254,39 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
           </TabsList>
 
           <TabsContent value="story" className="pt-6">
-          <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 prose max-w-none break-words">
-              <div className="whitespace-pre-line break-words">{campaign.story}</div>
-            </div>
+            <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 prose max-w-none break-words">
+                <div className="whitespace-pre-line break-words">{campaign.story}</div>
+              </div>
 
-            <div>
+              <div>
                 <div className="bg-card rounded-lg border p-4">
                   <h3 className="font-medium mb-3">About the creator</h3>
                   <div className="flex items-center mb-4">
                     <div className="relative h-12 w-12 rounded-full overflow-hidden">
-                    <img
-                      src={campaign.creatorAvatar}
-                      alt={campaign.creatorName}
-                       className="object-cover w-full h-full"
-                    />
+                      <img
+                        src={campaign.creatorAvatar}
+                        alt={campaign.creatorName}
+                        className="object-cover w-full h-full"
+                      />
                     </div>
                     <div className="ml-3">
                       <p className="font-medium">{campaign.creatorName}</p>
-                      <p className="text-sm text-muted-foreground capitalize">{campaign.creatorAddress}</p>
+                      <p className="text-sm text-muted-foreground capitalize">
+                        {campaign.creatorAddress}
+                      </p>
                     </div>
                   </div>
                   <p className="text-sm text-muted-foreground">{campaign.creatorBio}</p>
-                  <Button variant="outline" className="w-full mt-4 bg-gray-700 hover:bg-gray-800 text-white rounded shadow-sm transition-all hover:shadow-md duration-300 cursor-pointer">
+                  <Button
+                    variant="outline"
+                    className="w-full mt-4 bg-gray-700 hover:bg-gray-800 text-white rounded shadow-sm transition-all hover:shadow-md duration-300 cursor-pointer"
+                  >
                     Contact creator
                   </Button>
                 </div>
               </div>
-              </div>
+            </div>
           </TabsContent>
 
           <TabsContent value="comments" className="pt-6">

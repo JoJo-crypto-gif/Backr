@@ -1,4 +1,6 @@
 require('dotenv').config();
+console.log("💡 PAYSTACK_SECRET =", process.env.PAYSTACK_SECRET);
+
 const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
@@ -11,7 +13,11 @@ const multer = require('multer'); // Import multer
 const User = require('./models/user'); // User model
 const campaignRoutes = require('./routes/campaignRoutes'); // Campaign routes
 const userRoutes = require('./routes/userRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
+const transactionRoutes = require('./routes/transactionRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
+const webhookRoute = require('./routes/webhookRoutes');
+const paystackRoutes = require('./routes/paystackRoutes');
 
 const app = express();
 const PORT = 5000;
@@ -101,7 +107,11 @@ const upload = multer({ storage: storage });
 // Routes
 app.use('/campaigns', campaignRoutes);
 app.use('/users', userRoutes);
+app.use('/api/payments', paymentRoutes);
 app.use('/categories', categoryRoutes);
+app.use('/api/transactions', transactionRoutes);
+app.use('/webhook', webhookRoute);
+app.use('/api/paystack', paystackRoutes);
 
 // Root route
 app.get('/', (req, res) => {
@@ -127,7 +137,7 @@ app.get('/logout', (req, res) => {
 
 // Get current user session
 app.get('/current_user', (req, res) => {
-  console.log('User:', req.user);
+  // console.log('User:', req.user);
   if (req.user) {
     res.json({ user: req.user });
   } else {
