@@ -10,7 +10,7 @@ backend/uploads/
 uploads/
 
 # Ignore environment files
+backend/.env
 .env
-
 # Ignore IDE or editor-specific files (e.g., VSCode)
 .vscode/
