@@ -16,12 +16,15 @@
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
     "express-session": "^1.18.1",
+    "express-validator": "^7.2.1",
+    "express-winston": "^4.2.0",
     "mongodb": "^6.15.0",
     "mongoose": "^8.13.1",
     "multer": "^1.4.5-lts.2",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "react-paystack": "^6.0.0",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "winston": "^3.17.0"
   }
 }

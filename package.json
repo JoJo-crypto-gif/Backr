@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "express-winston": "^4.2.0",
+    "winston": "^3.17.0"
+  }
+}
