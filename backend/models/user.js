@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema({
   avatar: { type: String, default: '/uploads/avatar/default.jpg' },  // Default profile image
   bio: { type: String, default: '' },
   address: { type: String, default: '' },
-  role: { type: String, enum: ['user', 'admin'], default: 'user' }  
+  role: { type: String, enum: ['user', 'admin'], default: 'user' },
+  balance: {type: Number, default: 0}  
 });
 
 module.exports = mongoose.model('user', userSchema);

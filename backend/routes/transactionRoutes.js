@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Transaction = require('../models/transaction');
 const Campaign = require('../models/campaign');
+const User = require('../models/user');
+
 
 // POST /api/transactions/record
 router.post('/record', async (req, res) => {
@@ -36,22 +38,34 @@ router.post('/record', async (req, res) => {
     await transaction.save();
 
     // If payment was successful, update campaign
-    if (status === 'success') {
-      const updatedCampaign = await Campaign.findOneAndUpdate(
-        { campaignId },
-        {
-          $inc: { raisedamt: numericAmount, backers: 1 }
-        },
-        { new: true }
-      );
+if (status === 'success') {
+  const updatedCampaign = await Campaign.findOneAndUpdate(
+    { campaignId },
+    {
+      $inc: { raisedamt: numericAmount, backers: 1 }
+    },
+    { new: true }
+  );
 
-      if (!updatedCampaign) {
-        console.warn("Campaign not found to update:", campaignId);
-        return res.status(404).json({ success: false, message: "Campaign not found." });
-      }
+  if (!updatedCampaign) {
+    console.warn("Campaign not found to update:", campaignId);
+    return res.status(404).json({ success: false, message: "Campaign not found." });
+  }
 
-      console.log("✅ Campaign updated:", updatedCampaign.title);
-    }
+  console.log("✅ Campaign updated:", updatedCampaign.title);
+
+  // 🔽 ADD THIS CODE HERE to update creator's balance
+  const creatorId = updatedCampaign.creatorId;
+  const creator = await User.findById(creatorId);
+  if (creator) {
+    creator.balance += numericAmount;
+    await creator.save();
+    console.log(`💰 ₦${numericAmount} added to ${creator.email}'s balance.`);
+  } else {
+    console.warn("⚠️ Creator not found for campaign:", campaignId);
+  }
+}
+
 
     res.status(201).json({ success: true, transaction });
   } catch (error) {

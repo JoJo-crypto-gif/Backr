@@ -11,6 +11,10 @@ uploads/
 
 # Ignore environment files
 backend/.env
+frontend/ .env.local
+frontend/ .env.production
 .env
+.env.production
+.env.local
 # Ignore IDE or editor-specific files (e.g., VSCode)
 .vscode/
