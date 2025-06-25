@@ -9,6 +9,9 @@ interface User {
   avatar?: string
   role: string
   googleId?: string
+  address?: string 
+  bio?: string;    
+  balance: number  
   loading: boolean; // Notice 'loading' here
 }
 

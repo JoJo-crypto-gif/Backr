@@ -49,5 +49,47 @@ router.get("/verify/:reference", async (req, res) => {
   }
 });
 
+// Create transfer recipient
+router.post('/create-recipient', async (req, res) => {
+  const { type, name, phone, network, account_number, bank_code } = req.body;
+
+  let payload = {
+    type,
+    name,
+    currency: "GHS"
+  };
+
+  if (type === 'mobile_money') {
+    payload.details = {
+      phone_number: phone,
+      provider: network.toLowerCase() // e.g., mtn, airtel, tigo
+    };
+  } else if (type === 'ghana_bank') {
+    payload.details = {
+      account_number,
+      bank_code
+    };
+  } else {
+    return res.status(400).json({ error: 'Unsupported payout type' });
+  }
+
+  try {
+    const response = await axios.post('https://api.paystack.co/transferrecipient', payload, {
+      headers: {
+        Authorization: `Bearer ${PAYSTACK_SECRET}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const recipient = response.data.data;
+    console.log('✅ Transfer recipient created:', recipient);
+
+    res.json({ recipient });
+  } catch (err) {
+    console.error('❌ Error creating recipient:', err.response?.data || err.message);
+    res.status(500).json({ error: 'Failed to create recipient' });
+  }
+});
+
 
 module.exports = router;

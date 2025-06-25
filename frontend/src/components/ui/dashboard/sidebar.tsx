@@ -139,6 +139,12 @@ const displayName = user?.name || "Guest"
                     New campaign
                     </Link>
           </button>
+          <button type="button" className="block border w-4/5 m-auto ml-3.5 mr-3.5 h-[50px] p-3 text-white bg-blue-900 rounded-xl justify-items-center cursor-pointer hover:bg-gray-900 transition-all duration-300">
+                    <Link to="/dashboard/withdraw" className="flex">
+                    <CirclePlus className="h-6 w-4 mr-1" />
+                    Withdraw Cash
+                    </Link>
+          </button>
       </SidebarContent>
       <SidebarFooter className="hidden md:block">
         <SidebarMenu>
