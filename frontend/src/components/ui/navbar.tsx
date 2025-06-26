@@ -94,8 +94,8 @@ export default function Navbar() {
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuTrigger>Campaigns</NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <div className="grid w-full gap-3 md:w-[500px] md:grid-cols-2 bg-white/80 backdrop-blur-sm ">
+              <NavigationMenuContent className="bg-white/80 backdrop-blur-sm border border-gray-200 shadow-lg">
+                <div className="grid w-full gap-3 md:w-[500px] md:grid-cols-2">
                   <NavigationMenuLink asChild>
                     <Link to="/campaigns" className="flex flex-col gap-1 rounded-md p-3 hover:bg-accent w-full">
                       <div className="font-medium">Browse Campaings</div>
@@ -125,8 +125,8 @@ export default function Navbar() {
             </NavigationMenuItem>
             <NavigationMenuItem>
               <NavigationMenuTrigger>Services</NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <div className="grid w-[400px] gap-3 p-4 bg-white/80 backdrop-blur-sm">
+              <NavigationMenuContent className="bg-white/80 backdrop-blur-sm border border-gray-200 shadow-lg">
+                <div className="grid w-[400px] gap-3">
                   <NavigationMenuLink asChild>
                     <Link to="#" className="flex flex-col gap-1 rounded-md p-3 hover:bg-accent">
                       <div className="font-medium">Consulting</div>
@@ -177,8 +177,8 @@ export default function Navbar() {
                 {user.name}
               </NavigationMenuTrigger>
 
-              <NavigationMenuContent>
-                <div className="grid w-[auto] gap-3 p-4 bg-white/80 backdrop-blur-sm">
+              <NavigationMenuContent className="bg-white/80 backdrop-blur-sm border border-gray-200 shadow-lg">
+                <div className="grid w-[auto] gap-3 p-4">
                   <NavigationMenuLink asChild>
                     <Link
                       to="/dashboard"
