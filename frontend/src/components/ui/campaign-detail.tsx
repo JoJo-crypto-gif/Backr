@@ -251,6 +251,12 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
             >
               Comments
             </TabsTrigger>
+                        <TabsTrigger
+              value="updates"
+              className="rounded-none border-b-2 border-transparent text-gray-500 data-[state=active]:border-b-black data-[state=active]:bg-transparent data-[state=active]:text-black px-4 py-3"
+            >
+              Updates
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="story" className="pt-6">
@@ -297,6 +303,15 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
                 Be the first to comment on this campaign
               </p>
               <Button>Add a comment</Button>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="updates" className="pt-6">
+            <div className="text-center py-12">
+              <h3 className="text-lg font-medium mb-2">Updates!</h3>
+              <p className="text-muted-foreground mb-6">
+                Campaign updates would posted here
+              </p>
             </div>
           </TabsContent>
         </Tabs>

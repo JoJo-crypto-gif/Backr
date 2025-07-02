@@ -18,6 +18,9 @@ const transactionRoutes = require('./routes/transactionRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const webhookRoute = require('./routes/webhookRoutes');
 const paystackRoutes = require('./routes/paystackRoutes');
+const withdrawalRoutes = require('./routes/withdrawalRoutes');
+const commentRoutes = require('./routes/commentRoutes');
+
 
 const app = express();
 const PORT = 5000;
@@ -112,6 +115,9 @@ app.use('/categories', categoryRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/webhook', webhookRoute);
 app.use('/api/paystack', paystackRoutes);
+app.use('/withdrawals', withdrawalRoutes);
+app.use('/api/comments', commentRoutes);
+
 
 // Root route
 app.get('/', (req, res) => {
@@ -156,3 +162,11 @@ app.listen(PORT, () => {
 
 // Serve uploaded images
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+app.get('/test-auth', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.json({ loggedIn: true, user: req.user });
+  } else {
+    res.json({ loggedIn: false });
+  }
+});
