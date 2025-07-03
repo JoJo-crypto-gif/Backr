@@ -1,10 +1,10 @@
 const express = require("express")
 const Comment = require("../models/comment")
-const ensureAuthenticated = require("../middleware/auth"); // ✅ CORRECT
+const ensureAuthenticated = require("../middleware/auth");
 
 const router = express.Router()
 
-// GET comments for a campaign using campaignId (string UUID)
+// used campaign string UUID
 router.get("/:campaignId", async (req, res) => {
   try {
     const comments = await Comment.find({ campaignId: req.params.campaignId })
@@ -17,11 +17,10 @@ router.get("/:campaignId", async (req, res) => {
   }
 })
 
-// POST comment for a campaign using campaignId (string UUID)
 router.post("/:campaignId", ensureAuthenticated, async (req, res) => {
   try {
     const newComment = new Comment({
-      campaignId: req.params.campaignId, // ← use UUID here
+      campaignId: req.params.campaignId,
       userId: req.user._id,
       text: req.body.text,
     })
