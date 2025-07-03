@@ -1,43 +1,37 @@
-const express = require('express');
-const Comment = require('../models/comment');
-const ensureAuth = require('../middleware/auth'); // <-- import it
-const router = express.Router();
+const express = require("express")
+const Comment = require("../models/comment")
+const ensureAuthenticated = require("../middleware/auth"); // ✅ CORRECT
 
-// Get comments for a campaign
-router.get('/:campaignId', async (req, res) => {
+const router = express.Router()
+
+// GET comments for a campaign using campaignId (string UUID)
+router.get("/:campaignId", async (req, res) => {
   try {
     const comments = await Comment.find({ campaignId: req.params.campaignId })
-      .populate('userId', 'name avatar')
-      .sort({ createdAt: -1 });
+      .populate("userId", "name avatar")
+      .sort({ createdAt: -1 })
 
-    res.status(200).json({ success: true, comments });
+    res.status(200).json({ success: true, comments })
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ success: false, message: "Failed to fetch comments" })
   }
-});
+})
 
-// Post a new comment (only if logged in)
-router.post('/:campaignId', ensureAuth, async (req, res) => {
-  const { text } = req.body;
-
-  if (!text || text.trim().length === 0) {
-    return res.status(400).json({ success: false, message: 'Comment text is required.' });
-  }
-
+// POST comment for a campaign using campaignId (string UUID)
+router.post("/:campaignId", ensureAuthenticated, async (req, res) => {
   try {
     const newComment = new Comment({
-      campaignId: req.params.campaignId,
-      userId: req.user._id, // comes from session
-      text: text.trim(),
-    });
+      campaignId: req.params.campaignId, // ← use UUID here
+      userId: req.user._id,
+      text: req.body.text,
+    })
 
-    await newComment.save();
-    const populatedComment = await newComment.populate('userId', 'name avatar');
-
-    res.status(201).json({ success: true, comment: populatedComment });
+    await newComment.save()
+    const populated = await newComment.populate("userId", "name avatar")
+    res.status(201).json({ success: true, comment: populated })
   } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
+    res.status(500).json({ success: false, message: "Failed to post comment" })
   }
-});
+})
 
-module.exports = router;
+module.exports = router

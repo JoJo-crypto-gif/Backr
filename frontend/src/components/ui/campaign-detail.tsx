@@ -1,16 +1,12 @@
 import { useState, useEffect } from "react"
-import {
-  ArrowLeft,
-  Share2,
-  BookmarkPlus,
-  MessageSquare,
-  AlertCircle
-} from "lucide-react"
+import { ArrowLeft, Share2, BookmarkPlus, MessageSquare, AlertCircle, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import axios from "axios"
 import DonationModal from "./donation-modal"
+import { useComments } from "@/hooks/useComments"
+import { CommentForm } from "@/components/ui/comment-form"
+import { CommentItem } from "@/components/ui/comment-item"
 
 interface CampaignDetailProps {
   campaignId?: string
@@ -20,6 +16,7 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
   const [campaign, setCampaign] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [selectedImage, setSelectedImage] = useState("")
+  const { comments, loading: commentsLoading, posting, error: commentsError, postComment } = useComments(campaignId)
 
   useEffect(() => {
     const fetchCampaign = async () => {
@@ -29,8 +26,6 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
         if (response.ok) {
           const data = await response.json()
           const raw = data.campaign
-
-          // Format data to match UI expectation
           const formatted = {
             ...raw,
             goalAmount: raw.goalamt,
@@ -39,12 +34,7 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
             creatorAddress: raw.creatorId?.address || "unknown address",
             creatorName: raw.creatorId?.name || "Unknown",
             creatorAvatar: raw.creatorId?.avatar || "/placeholder.svg",
-            daysLeft: Math.max(
-              0,
-              Math.floor(
-                (new Date(raw.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
-              )
-            )
+            daysLeft: Math.max(0, Math.floor((new Date(raw.deadline).getTime() - Date.now()) / (1000 * 60 * 60 * 24))),
           }
 
           setCampaign(formatted)
@@ -89,34 +79,7 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
   }
 
   // Calculate percentage funded
-  const percentFunded = Math.min(
-    Math.round((campaign.raisedAmount / campaign.goalAmount) * 100),
-    100
-  )
-
-  // Function to handle donation via Paystack
-  const handleDonate = async () => {
-    // For now, we use a prompt to get donation amount
-    const donation = prompt("Enter your donation amount (in Naira):")
-    if (!donation) return
-
-    // In a real app, use the logged-in user's email here
-    const donorEmail = "user@example.com"
-
-    try {
-      const response = await axios.post("http://localhost:5000/api/payments/initialize", {
-        email: donorEmail,
-        amount: Number(donation),
-        campaignId: campaign.campaignId || campaign._id // adapt based on your data
-      })
-
-      // Redirect to the Paystack checkout page
-      window.location.href = response.data.url
-    } catch (error) {
-      console.error("Error initializing payment:", error)
-      alert("There was an error starting your payment. Please try again.")
-    }
-  }
+  const percentFunded = Math.min(Math.round((campaign.raisedAmount / campaign.goalAmount) * 100), 100)
 
   return (
     <div className="px-4 md:px-6 py-8 md:py-12 container m-auto">
@@ -154,7 +117,7 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
                     onClick={() => setSelectedImage(img)}
                   >
                     <img
-                      src={img}
+                      src={img || "/placeholder.svg"}
                       alt={`${campaign.title} image ${idx + 1}`}
                       className="object-cover rounded-md h-full w-full"
                     />
@@ -179,7 +142,7 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
           <div className="flex items-center">
             <div className="relative h-12 w-12 rounded-full overflow-hidden">
               <img
-                src={campaign.creatorAvatar}
+                src={campaign.creatorAvatar || "/placeholder.svg"}
                 alt={campaign.creatorName}
                 className="object-cover w-full h-full"
               />
@@ -194,21 +157,15 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
           <div className="bg-gray-100 rounded-lg p-4 space-y-4">
             <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-2xl font-bold">
-                  ${campaign.raisedAmount.toLocaleString()}
-                </span>
-                <span className="text-muted-foreground">
-                  ${campaign.goalAmount.toLocaleString()} goal
-                </span>
+                <span className="text-2xl font-bold">${campaign.raisedAmount.toLocaleString()}</span>
+                <span className="text-muted-foreground">${campaign.goalAmount.toLocaleString()} goal</span>
               </div>
               <Progress value={percentFunded} className="h-2" />
             </div>
 
             <div className="grid grid-cols-2 gap-4 py-2">
               <div>
-                <p className="text-2xl font-bold">
-                  {campaign.backers?.toLocaleString()}
-                </p>
+                <p className="text-2xl font-bold">{campaign.backers?.toLocaleString()}</p>
                 <p className="text-sm text-muted-foreground">Backers</p>
               </div>
               <div>
@@ -218,8 +175,7 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
             </div>
 
             {/* Donation button to trigger donation flow */}
-<DonationModal campaignId={campaign.campaignId || campaign._id} />
-
+            <DonationModal campaignId={campaign.campaignId || campaign._id} />
 
             <div className="flex justify-between pt-2">
               <Button variant="ghost" size="sm" className="text-muted-foreground">
@@ -249,9 +205,9 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
               value="comments"
               className="rounded-none border-b-2 border-transparent text-gray-500 data-[state=active]:border-b-black data-[state=active]:bg-transparent data-[state=active]:text-black px-4 py-3"
             >
-              Comments
+              Comments ({comments.length})
             </TabsTrigger>
-                        <TabsTrigger
+            <TabsTrigger
               value="updates"
               className="rounded-none border-b-2 border-transparent text-gray-500 data-[state=active]:border-b-black data-[state=active]:bg-transparent data-[state=active]:text-black px-4 py-3"
             >
@@ -264,54 +220,69 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
               <div className="lg:col-span-2 prose max-w-none break-words">
                 <div className="whitespace-pre-line break-words">{campaign.story}</div>
               </div>
-
               <div>
                 <div className="bg-card rounded-lg border p-4">
                   <h3 className="font-medium mb-3">About the creator</h3>
                   <div className="flex items-center mb-4">
                     <div className="relative h-12 w-12 rounded-full overflow-hidden">
                       <img
-                        src={campaign.creatorAvatar}
+                        src={campaign.creatorAvatar || "/placeholder.svg"}
                         alt={campaign.creatorName}
                         className="object-cover w-full h-full"
                       />
                     </div>
                     <div className="ml-3">
                       <p className="font-medium">{campaign.creatorName}</p>
-                      <p className="text-sm text-muted-foreground capitalize">
-                        {campaign.creatorAddress}
-                      </p>
+                      <p className="text-sm text-muted-foreground capitalize">{campaign.creatorAddress}</p>
                     </div>
                   </div>
                   <p className="text-sm text-muted-foreground">{campaign.creatorBio}</p>
-                  <Button
-                    variant="outline"
-                    className="w-full mt-4 bg-gray-700 hover:bg-gray-800 text-white rounded shadow-sm transition-all hover:shadow-md duration-300 cursor-pointer"
-                  >
-                    Contact creator
-                  </Button>
+                  <Button variant="outline" className="w-full mt-4 bg-gray-700 hover:bg-gray-800 text-white rounded shadow-sm transition-all hover:shadow-md duration-300 cursor-pointer">Contact creator</Button>
                 </div>
               </div>
             </div>
           </TabsContent>
 
           <TabsContent value="comments" className="pt-6">
-            <div className="text-center py-12">
-              <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-medium mb-2">Join the conversation</h3>
-              <p className="text-muted-foreground mb-6">
-                Be the first to comment on this campaign
-              </p>
-              <Button>Add a comment</Button>
+            <div className="space-y-6">
+              {commentsError && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <div className="flex items-center space-x-2">
+                    <AlertCircle className="h-4 w-4 text-red-500" />
+                    <span className="text-red-700 text-sm">{commentsError}</span>
+                  </div>
+                </div>
+              )}
+
+              <CommentForm onSubmit={postComment} posting={posting} />
+
+              {commentsLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="text-center">
+                    <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-gray-400" />
+                    <p className="text-gray-500">Loading comments...</p>
+                  </div>
+                </div>
+              ) : comments.length === 0 ? (
+                <div className="text-center py-12">
+                  <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-medium mb-2">No comments yet</h3>
+                  <p className="text-muted-foreground mb-6">Be the first to share your thoughts about this campaign!</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {comments.map((comment) => (
+                    <CommentItem key={comment._id} comment={comment} />
+                  ))}
+                </div>
+              )}
             </div>
           </TabsContent>
 
           <TabsContent value="updates" className="pt-6">
             <div className="text-center py-12">
               <h3 className="text-lg font-medium mb-2">Updates!</h3>
-              <p className="text-muted-foreground mb-6">
-                Campaign updates would posted here
-              </p>
+              <p className="text-muted-foreground mb-6">Campaign updates would posted here</p>
             </div>
           </TabsContent>
         </Tabs>
