@@ -9,9 +9,9 @@ import DonationModal from "./donation-modal"
 import { useComments } from "@/hooks/useComments"
 import { CommentForm } from "@/components/ui/comment-form"
 import { CommentItem } from "@/components/ui/comment-item"
-import { useCampaignUpdates } from "@/hooks/useCampaignUpdates" // ✅ Import the updates hook
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card" // For displaying updates
-import { format, parseISO } from "date-fns" // For date formatting
+import { useCampaignUpdates } from "@/hooks/useCampaignUpdates"
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card"
+import { format } from "date-fns"
 
 interface CampaignDetailProps {
   campaignId?: string
@@ -22,10 +22,8 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
   const [loading, setLoading] = useState(true)
   const [selectedImage, setSelectedImage] = useState("")
 
-  // Destructure from useComments
+  // Destructure from useComments and useCampaingUpdates
   const { comments, loading: commentsLoading, posting, error: commentsError, postComment } = useComments(campaignId)
-
-  // ✅ Destructure from useCampaignUpdates
   const { updates, loading: updatesLoading, error: updatesError } = useCampaignUpdates(campaignId)
 
 
