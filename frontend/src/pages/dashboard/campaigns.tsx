@@ -161,6 +161,15 @@ export default function CampaignsTable() {
                           <Trash2 className="h-4 w-4" />
                         <span className="sr-only">Delete</span>
                         </Button>
+                        <Button variant="outline" size="icon" className="hover:bg-green-900 hover:text-white transition-all duration-300 cursor-pointer font-bold" asChild>
+  <Link to={`/dashboard/updates?campaignId=${campaign.campaignId}`}>
+    <span className="sr-only">Manage Updates</span>
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 17l6-6 4 4 8-8" />
+    </svg>
+  </Link>
+</Button>
+
                       </div>
                     </TableCell>
                   </TableRow>

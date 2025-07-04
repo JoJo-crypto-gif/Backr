@@ -1,3 +1,5 @@
+// In src/pages/campaign-details.tsx
+
 import { useState, useEffect } from "react"
 import { ArrowLeft, Share2, BookmarkPlus, MessageSquare, AlertCircle, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -7,6 +9,9 @@ import DonationModal from "./donation-modal"
 import { useComments } from "@/hooks/useComments"
 import { CommentForm } from "@/components/ui/comment-form"
 import { CommentItem } from "@/components/ui/comment-item"
+import { useCampaignUpdates } from "@/hooks/useCampaignUpdates" // ✅ Import the updates hook
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card" // For displaying updates
+import { format, parseISO } from "date-fns" // For date formatting
 
 interface CampaignDetailProps {
   campaignId?: string
@@ -16,7 +21,13 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
   const [campaign, setCampaign] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [selectedImage, setSelectedImage] = useState("")
+
+  // Destructure from useComments
   const { comments, loading: commentsLoading, posting, error: commentsError, postComment } = useComments(campaignId)
+
+  // ✅ Destructure from useCampaignUpdates
+  const { updates, loading: updatesLoading, error: updatesError } = useCampaignUpdates(campaignId)
+
 
   useEffect(() => {
     const fetchCampaign = async () => {
@@ -211,7 +222,7 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
               value="updates"
               className="rounded-none border-b-2 border-transparent text-gray-500 data-[state=active]:border-b-black data-[state=active]:bg-transparent data-[state=active]:text-black px-4 py-3"
             >
-              Updates
+              Updates ({updates.length}) {/* ✅ Display updates count */}
             </TabsTrigger>
           </TabsList>
 
@@ -279,10 +290,54 @@ export default function CampaignDetail({ campaignId = "1" }: CampaignDetailProps
             </div>
           </TabsContent>
 
+          {/* ✅ Updates Tab Content */}
           <TabsContent value="updates" className="pt-6">
-            <div className="text-center py-12">
-              <h3 className="text-lg font-medium mb-2">Updates!</h3>
-              <p className="text-muted-foreground mb-6">Campaign updates would posted here</p>
+            <div className="space-y-6">
+              {updatesError && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <div className="flex items-center space-x-2">
+                    <AlertCircle className="h-4 w-4 text-red-500" />
+                    <span className="text-red-700 text-sm">{updatesError}</span>
+                  </div>
+                </div>
+              )}
+
+              {updatesLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="text-center">
+                    <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-gray-400" />
+                    <p className="text-gray-500">Loading updates...</p>
+                  </div>
+                </div>
+              ) : updates.length === 0 ? (
+                <div className="text-center py-12">
+                  <h3 className="text-lg font-medium mb-2">No updates yet!</h3>
+                  <p className="text-muted-foreground mb-6">Stay tuned for the latest news on this campaign.</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {updates.map((update) => (
+                    <Card key={update._id}>
+                      <CardHeader>
+                        <CardTitle>{update.title}</CardTitle>
+                        <CardDescription className="text-sm text-gray-500">
+                          Posted on {format(new Date(update.createdAt), "PPP @ p")}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-gray-700 whitespace-pre-wrap">{update.content}</p>
+                        {update.image && (
+                          <img
+                            src={update.image}
+                            alt={update.title}
+                            className="mt-4 max-w-full h-auto rounded-md"
+                          />
+                        )}
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
             </div>
           </TabsContent>
         </Tabs>

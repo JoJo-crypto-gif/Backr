@@ -20,6 +20,7 @@ const webhookRoute = require('./routes/webhookRoutes');
 const paystackRoutes = require('./routes/paystackRoutes');
 const withdrawalRoutes = require('./routes/withdrawalRoutes');
 const commentRoutes = require('./routes/commentRoutes');
+const updateRoutes = require("./routes/updateRoutes");
 
 
 const app = express();
@@ -117,6 +118,7 @@ app.use('/webhook', webhookRoute);
 app.use('/api/paystack', paystackRoutes);
 app.use('/withdrawals', withdrawalRoutes);
 app.use('/api/comments', commentRoutes);
+app.use("/api/updates", updateRoutes);
 
 
 // Root route
