@@ -1,4 +1,4 @@
-//routes/paystackRoutes.js - FIXED VERSION
+//routes/paystackRoutes.js
 
 const express = require("express");
 const axios = require("axios");
@@ -111,15 +111,14 @@ router.post('/withdrawals/process/:withdrawalId', async (req, res) => {
       
       const paystackProvider = providerMap[provider.toLowerCase()] || provider.toLowerCase();
       
-      recipientPayload = {
-        type: 'mobile_money',
-        name: withdrawal.userId.name,
-        currency: 'GHS',        
-        details: {
-          account_number: formattedPhone,
-          provider: paystackProvider
-        }
-      };
+recipientPayload = {
+  type: 'mobile_money',
+  name: withdrawal.userId.name,
+  currency: 'GHS',
+  account_number: formattedPhone,
+  provider: paystackProvider
+};
+
 
     } else if (withdrawal.type === 'bank') {
       const { account_number, bank_code, bank_name } = withdrawal.details;
@@ -150,6 +149,8 @@ router.post('/withdrawals/process/:withdrawalId', async (req, res) => {
     } else {
       return res.status(400).json({ error: 'Unsupported withdrawal type' });
     }
+console.log('🚨 Withdrawal Type:', withdrawal.type);
+
 
     console.log('📋 Creating recipient with payload:', JSON.stringify(recipientPayload, null, 2));
 

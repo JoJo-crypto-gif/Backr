@@ -21,6 +21,8 @@ const paystackRoutes = require('./routes/paystackRoutes');
 const withdrawalRoutes = require('./routes/withdrawalRoutes');
 const commentRoutes = require('./routes/commentRoutes');
 const updateRoutes = require("./routes/updateRoutes");
+const adminRoutes = require('./routes/adminRoutes');
+// const adminRoutes = require('./routes/admin');
 
 
 const app = express();
@@ -119,6 +121,7 @@ app.use('/api/paystack', paystackRoutes);
 app.use('/withdrawals', withdrawalRoutes);
 app.use('/api/comments', commentRoutes);
 app.use("/api/updates", updateRoutes);
+app.use('/api/admin', adminRoutes);
 
 
 // Root route
