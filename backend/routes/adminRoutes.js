@@ -1,13 +1,14 @@
 //routes/adminRoutes.js
 const express = require('express');
-const bcrypt = require('bcryptjs'); // using bcryptjs for consistency
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user'); // lowercase to match your actual file
+const User = require('../models/user');
 const adminAuth = require('../middleware/adminAuth');
+const Campaign = require('../models/campaign');
 
 const router = express.Router();
 
-/**
+/*
  * Create admin account
  */
 router.post('/register', async (req, res) => {
@@ -36,7 +37,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-/**
+/*
  * Admin login
  */
 router.post('/login', async (req, res) => {
@@ -75,6 +76,104 @@ router.get('/users', adminAuth, async (req, res) => {
     res.json(users);
   } catch (err) {
     console.error('Fetch users error:', err);
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
+});
+
+router.put('/campaigns/:campaignId/status', adminAuth, async (req, res) => {
+  try {
+    const { status } = req.body;
+    const { campaignId } = req.params; // Change from :id to :campaignId
+
+    // Validate the incoming status
+    if (!['approved', 'banned'].includes(status)) {
+      return res.status(400).json({ message: 'Invalid status provided' });
+    }
+    
+    // Find the campaign by campaignId and update its status
+    const campaign = await Campaign.findOneAndUpdate(
+      { campaignId }, // Change here: find by campaignId
+      { status },
+      { new: true } // Return the updated document
+    );
+
+    if (!campaign) {
+      return res.status(404).json({ message: 'Campaign not found' });
+    }
+
+    res.json({ message: `Campaign status updated to ${status}`, campaign });
+  } catch (err) {
+    console.error('Update campaign status error:', err);
+    res.status(500).json({ error: 'Failed to update campaign status' });
+  }
+});
+
+// Get all users
+router.get('/users', adminAuth, async (req, res) => {
+  try {
+    const users = await User.find();
+    res.json(users);
+  } catch (err) {
+    console.error('Fetch users error:', err);
+    res.status(500).json({ error: 'Failed to fetch users' });
+  }
+});
+
+// Get a list of all campaigns (admin only)
+router.get('/campaigns', adminAuth, async (req, res) => {
+  try {
+    const campaigns = await Campaign.find().populate('creatorId', 'name email');
+    res.json(campaigns);
+  } catch (err) {
+    console.error('Fetch campaigns error:', err);
+    res.status(500).json({ error: 'Failed to fetch campaigns' });
+  }
+});
+
+/*
+ * Get total counts for dashboard (admin only)
+ */
+router.get('/dashboard-metrics', adminAuth, async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments();
+    const totalCampaigns = await Campaign.countDocuments();
+    const pendingCampaigns = await Campaign.countDocuments({ status: 'pending' });
+    const approvedCampaigns = await Campaign.countDocuments({ status: 'approved' });
+
+    res.json({
+      totalUsers,
+      totalCampaigns,
+      pendingCampaigns,
+      approvedCampaigns
+    });
+  } catch (err) {
+    console.error('Fetch dashboard metrics error:', err);
+    res.status(500).json({ error: 'Failed to fetch dashboard metrics' });
+  }
+});
+
+router.get('/campaigns', adminAuth, async (req, res) => {
+  try {
+    // Fetch all campaigns, regardless of status
+    const campaigns = await Campaign.find({})
+      .populate('creatorId', 'name avatar bio')
+      .exec();
+    res.json(campaigns);
+  } catch (err) {
+    console.error('Fetch all campaigns for admin error:', err);
+    res.status(500).json({ error: 'Failed to fetch campaigns' });
+  }
+});
+
+/*
+ * Get all users for admin review (admin only)
+ */
+router.get('/users', adminAuth, async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.json(users);
+  } catch (err) {
+    console.error('Fetch all users for admin error:', err);
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 });

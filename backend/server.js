@@ -1,5 +1,5 @@
 require('dotenv').config();
-console.log("💡 PAYSTACK_SECRET =", process.env.PAYSTACK_SECRET);
+console.log("PAYSTACK_SECRET =", process.env.PAYSTACK_SECRET);
 
 const path = require('path');
 const express = require('express');
@@ -30,7 +30,7 @@ const PORT = 5000;
 
 // Enable CORS to allow frontend communication
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: ['http://localhost:5173', 'http://localhost:8080'],
   credentials: true
 }));
 

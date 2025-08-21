@@ -59,7 +59,7 @@ router.post('/create', upload, async (req, res) => {
 // Get all campaigns
 router.get('/all', async (req, res) => {
   try {
-    const campaigns = await Campaign.find()
+    const campaigns = await Campaign.find({ status: 'approved' })
       .populate('creatorId', 'name avatar bio')
       .exec();
     res.status(200).json({ success: true, campaigns });
