@@ -1,4 +1,4 @@
-import Navbar from "../components/ui/navbar"; // if you're inside /pages/
+import Navbar from "../components/ui/navbar";
 import InlineFilter from "../components/ui/inline-filter"; 
 import CampaignGrid from "../components/ui/campaign-grid";
 

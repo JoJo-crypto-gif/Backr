@@ -127,11 +127,11 @@ export default function CampaignsTable() {
                <TableHeader>
                 <TableRow>
                   <TableHead className="justify-items-center text-center text-lg">Title</TableHead>
-                  <TableHead className="justify-items-center text-center text-lg">Budget</TableHead>
+                  <TableHead className="justify-items-center text-center text-lg">Goal</TableHead>
                   <TableHead className="justify-items-center text-center text-lg">Start Date</TableHead>
                   <TableHead className="justify-items-center text-center text-lg">End Date</TableHead>
-                  <TableHead className="justify-items-center text-center text-lg">Progress</TableHead>
-                  <TableHead className="justify-items-center text-center text-lg">Actions</TableHead>
+                  <TableHead className="justify-items-center text-left text-lg">Progress</TableHead>
+                  <TableHead className="justify-items-center text-right text-lg">Actions</TableHead>
                </TableRow>
               </TableHeader>
               <TableBody>
@@ -142,11 +142,11 @@ export default function CampaignsTable() {
                     <TableCell className="justify-items-center text-center">{new Date(campaign.createdAt).toLocaleDateString()}</TableCell>
                     <TableCell className="justify-items-center text-center">{campaign.deadline ? new Date(campaign.deadline).toLocaleDateString() : "Ongoing"}</TableCell>
                     <TableCell className="justify-items-center text-center">
-                     <div className="flex items-center gap-2">
-                        <div className="h-2 w-24 bg-gray-200 rounded-full overflow-hidden">
-                        <div className="h-full bg-gray-700 rounded-full" style={{ width: `${(campaign.raisedamt / campaign.goalamt) * 100}%` }} />
+                     <div className="flex items-center gap-2 justify-items-center text-center">
+                        <div className="h-2 w-24 bg-gray-200 rounded-full overflow-hidden justify-items-center text-center">
+                        <div className="h-full bg-gray-700 rounded-full justify-items-center text-center" style={{ width: `${(campaign.raisedamt / campaign.goalamt) * 100}%` }} />
                         </div>
-                        <span className="text-sm">{Math.round((campaign.raisedamt / campaign.goalamt) * 100) || 0}%</span>
+                        <span className="text-sm justify-items-center text-center">{Math.round((campaign.raisedamt / campaign.goalamt) * 100) || 0}%</span>
                      </div>
                     </TableCell>
                     <TableCell className="justify-items-center text-center">

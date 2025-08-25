@@ -50,38 +50,13 @@ export default function InlineFilter() {
             <SelectTrigger className="w-full md:w-[140px]">
               <SelectValue placeholder="Category" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-white/80 backdrop-blur-sm border border-gray-200 shadow-lg cursor-pointer">
               <SelectItem value="all">All Categories</SelectItem>
-              <SelectItem value="#">From backend</SelectItem>
-            </SelectContent>
-          </Select>
-
-          {/* Status Dropdown */}
-          <Select value={status} onValueChange={setStatus}>
-            <SelectTrigger className="w-full md:w-[140px]">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="trending">Trending</SelectItem>
-              <SelectItem value="new">New</SelectItem>
-              <SelectItem value="ending">Ending Soon</SelectItem>
-              <SelectItem value="completed">Completed</SelectItem>
-            </SelectContent>
-          </Select>
-
-          {/* Funding Progress Dropdown */}
-          <Select value={funding} onValueChange={setFunding}>
-            <SelectTrigger className="w-full md:w-[140px]">
-              <SelectValue placeholder="Funding" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="any">Any Funding</SelectItem>
-              <SelectItem value="under25">Under 25%</SelectItem>
-              <SelectItem value="25to50">25% - 50%</SelectItem>
-              <SelectItem value="50to75">50% - 75%</SelectItem>
-              <SelectItem value="over75">Over 75%</SelectItem>
-              <SelectItem value="funded">Fully Funded</SelectItem>
+              <SelectItem value="medical" className="cursor-pointer">Medical</SelectItem>
+              <SelectItem value="education" className="cursor-pointer">Education</SelectItem>
+              <SelectItem value="emergency" className="cursor-pointer">Emergency</SelectItem>
+              <SelectItem value="nonprofit" className="cursor-pointer">Non-profit</SelectItem>
+              <SelectItem value="other" className="cursor-pointer">Other</SelectItem>
             </SelectContent>
           </Select>
 
@@ -90,7 +65,7 @@ export default function InlineFilter() {
             <SelectTrigger className="w-full md:w-[140px]">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-white/80 backdrop-blur-sm border border-gray-200 shadow-lg">
               <SelectItem value="popular">Most Popular</SelectItem>
               <SelectItem value="newest">Newest</SelectItem>
               <SelectItem value="ending">Ending Soon</SelectItem>

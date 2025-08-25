@@ -84,7 +84,7 @@ export default function Navbar() {
       <div className="flex items-center">
         <Link to="/" className="flex items-center gap-2">
           <Mountain className="h-6 w-6" />
-          <span className="hidden font-semibold sm:inline-block">BackR</span>
+          <span className="hidden font-semibold sm:inline-block">CrowdFunding</span>
         </Link>
       </div>
 
@@ -98,32 +98,32 @@ export default function Navbar() {
                 <div className="grid w-full gap-3 md:w-[500px] md:grid-cols-2">
                   <NavigationMenuLink asChild>
                     <Link to="/campaigns" className="flex flex-col gap-1 rounded-md p-3 hover:bg-accent w-full">
-                      <div className="font-medium">Browse Campaings</div>
+                      <div className="font-medium">Education</div>
                       <div className="text-sm text-muted-foreground">Description for product one goes here</div>
                     </Link>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
                     <Link to="#" className="flex flex-col gap-1 rounded-md p-3 hover:bg-accent">
-                      <div className="font-medium">Product Two</div>
+                      <div className="font-medium">Medical</div>
                       <div className="text-sm text-muted-foreground">Description for product two goes here</div>
                     </Link>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
                     <Link to="#" className="flex flex-col gap-1 rounded-md p-3 hover:bg-accent">
-                      <div className="font-medium">Product Three</div>
+                      <div className="font-medium">Envirenment</div>
                       <div className="text-sm text-muted-foreground">Description for product three goes here</div>
                     </Link>
                   </NavigationMenuLink>
                   <NavigationMenuLink asChild>
                     <Link to="#" className="flex flex-col gap-1 rounded-md p-3 hover:bg-accent">
-                      <div className="font-medium">Product Four</div>
+                      <div className="font-medium">Emergency</div>
                       <div className="text-sm text-muted-foreground">Description for product four goes here</div>
                     </Link>
                   </NavigationMenuLink>
                 </div>
               </NavigationMenuContent>
             </NavigationMenuItem>
-            <NavigationMenuItem>
+            {/* <NavigationMenuItem>
               <NavigationMenuTrigger>Services</NavigationMenuTrigger>
               <NavigationMenuContent className="bg-white/80 backdrop-blur-sm border border-gray-200 shadow-lg">
                 <div className="grid w-[400px] gap-3">
@@ -147,7 +147,7 @@ export default function Navbar() {
                   </NavigationMenuLink>
                 </div>
               </NavigationMenuContent>
-            </NavigationMenuItem>
+            </NavigationMenuItem> */}
             <NavigationMenuItem>
               <Link to="#">
                 <NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50">

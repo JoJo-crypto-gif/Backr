@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom"
 import { Link } from "react-router-dom"
 import { useCurrentUser } from "@/hooks/useCurrentUser"
 
-import { BookText, CreditCard, Home, Package, Settings, Users, Search, Bell, User, CirclePlus } from "lucide-react"
+import { BookText, Home, Package, Settings, Search, Bell, User, CirclePlus } from "lucide-react"
 
 import {
   Sidebar,
@@ -42,26 +42,26 @@ const navigationItems = [
     icon: BookText,
     href: "/dashboard/campaigns",
   },
-  {
-    title: "Customers",
-    icon: Users,
-    href: "/dashboard/customers",
-  },
-  {
-    title: "Products",
-    icon: Package,
-    href: "/dashboard/products",
-  },
-  {
-    title: "Billing",
-    icon: CreditCard,
-    href: "/dashboard/billing",
-  },
-  {
-    title: "Settings",
-    icon: Settings,
-    href: "/dashboard/settings",
-  },
+  // {
+  //   title: "Customers",
+  //   icon: Users,
+  //   href: "/dashboard/customers",
+  // },
+  // {
+  //   title: "Products",
+  //   icon: Package,
+  //   href: "/dashboard/products",
+  // },
+  // {
+  //   title: "Billing",
+  //   icon: CreditCard,
+  //   href: "/dashboard/billing",
+  // },
+  // {
+  //   title: "Settings",
+  //   icon: Settings,
+  //   href: "/dashboard/settings",
+  // },
 ]
 
 export function DashboardSidebar() {
@@ -83,7 +83,7 @@ const displayName = user?.name || "Guest"
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 font-semibold mt-3 mb-3">
             <Package className="h-6 w-6" />
-            <span>Backer</span>
+            <span>CrowdFunding</span>
           </Link>
           <div className="flex items-center gap-2 md:hidden">
             <Button variant="ghost" size="icon" className="rounded-full">

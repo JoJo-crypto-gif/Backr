@@ -279,9 +279,9 @@ export default function NewCampaignPage() {
                             <SelectValue placeholder="Select a category" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
+                        <SelectContent className="bg-white/80 backdrop-blur-sm border border-gray-200 shadow-lg">
                           {categories.map((category) => (
-                            <SelectItem key={category.id} value={category.id}>
+                            <SelectItem key={category.id} value={category.id} className="cursor-pointer">
                               {category.name}
                             </SelectItem>
                           ))}
@@ -343,7 +343,7 @@ export default function NewCampaignPage() {
                               </Button>
                             </FormControl>
                           </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
+                          <PopoverContent className="w-auto p-0 bg-white/80 backdrop-blur-sm border border-gray-200 shadow-lg cursor-pointer" align="start">
                             <Calendar
                               mode="single"
                               selected={field.value || undefined}
