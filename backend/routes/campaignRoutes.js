@@ -3,6 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const Campaign = require('../models/campaign');
+const User = require('../models/user'); // Import the User model
 
 const router = express.Router();
 
@@ -21,12 +22,39 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }
 }).array('images', 3); // max 3 images
 
-// Create a new campaign
-router.post('/create', upload, async (req, res) => {
-  try {
-    const { creatorId, title, description, category, story } = req.body;
+// Middleware to check if user is authenticated
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.status(401).json({ success: false, message: 'Authentication required' });
+}
 
-    // Convert and handle types
+// Create a new campaign
+router.post('/create', ensureAuthenticated, upload, async (req, res) => {
+  try {
+    const { title, description, category, story } = req.body;
+    const creatorId = req.user._id;
+
+    // Check if the user is verified
+    const user = await User.findById(creatorId);
+    if (!user || !user.isVerified) {
+      return res.status(403).json({
+        success: false,
+        message: 'You must be a verified user to create a campaign. Please apply for verification from your dashboard.'
+      });
+    }
+
+    // New check: Find if the user already has a campaign
+    const existingCampaign = await Campaign.findOne({ creatorId: creatorId });
+    if (existingCampaign) {
+      return res.status(403).json({
+        success: false,
+        message: 'You can only create one campaign per user. Please manage your existing campaign.'
+      });
+    }
+
+    // campaign creation logic
     const isRecurring = req.body.isRecurring === 'true';
     const goalamt = isRecurring ? null : Number(req.body.goalamt);
     const deadline = isRecurring ? null : new Date(req.body.deadline);

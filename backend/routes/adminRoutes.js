@@ -178,4 +178,74 @@ router.get('/users', adminAuth, async (req, res) => {
   }
 });
 
+
+// Route to get all pending verification applications
+router.get('/verification-applications', adminAuth, async (req, res) => {
+  try {
+    const pendingUsers = await User.find({ verificationStatus: 'pending' });
+    res.json(pendingUsers);
+  } catch (err) {
+    console.error('Fetch pending verification applications error:', err);
+    res.status(500).json({ error: 'Failed to fetch applications' });
+  }
+});
+
+// Route to approve a verification application
+router.put('/approve-verification/:userId', adminAuth, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        verificationStatus: 'approved',
+        isVerified: true
+      },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({ message: 'User verification approved', user });
+  } catch (err) {
+    console.error('Approve verification error:', err);
+    res.status(500).json({ error: 'Failed to approve verification' });
+  }
+});
+
+// Route to deny a verification application
+router.put('/deny-verification/:userId', adminAuth, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Delete the uploaded image file to save storage space
+    if (user.ghanaCardImage) {
+      const imagePath = path.join(__dirname, '..', 'uploads', 'ghana-cards', user.ghanaCardImage);
+      fs.unlink(imagePath, (err) => {
+        if (err) console.error('Failed to delete image:', err);
+      });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        verificationStatus: 'denied',
+        isVerified: false,
+        ghanaCardNumber: undefined,
+        ghanaCardImage: undefined,
+        verificationReason: undefined
+      },
+      { new: true }
+    );
+    res.json({ message: 'User verification denied', user: updatedUser });
+  } catch (err) {
+    console.error('Deny verification error:', err);
+    res.status(500).json({ error: 'Failed to deny verification' });
+  }
+});
+
 module.exports = router;

@@ -22,6 +22,7 @@ const withdrawalRoutes = require('./routes/withdrawalRoutes');
 const commentRoutes = require('./routes/commentRoutes');
 const updateRoutes = require("./routes/updateRoutes");
 const adminRoutes = require('./routes/adminRoutes');
+const verificationRoutes = require('./routes/verificationRoutes');
 // const adminRoutes = require('./routes/admin');
 
 
@@ -122,6 +123,7 @@ app.use('/withdrawals', withdrawalRoutes);
 app.use('/api/comments', commentRoutes);
 app.use("/api/updates", updateRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/verification', verificationRoutes);
 
 
 // Root route
