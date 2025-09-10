@@ -1,8 +1,12 @@
+//pages/AdminDashboard
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Users, Megaphone, Clock, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button"; 
 
 interface DashboardMetrics {
   totalUsers: number;
@@ -186,6 +190,15 @@ const AdminDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
+            <Link to="/admin/verification" className="w-full">
+              <button className="w-full text-left p-3 rounded-lg border hover:bg-accent transition-colors">
+                <p className="font-medium">Review Verification Requests</p>
+                <p className="text-sm text-muted-foreground">
+                  {/* You could optionally display the count of pending requests here */}
+                  Manage pending user identity verifications
+                </p>
+              </button>
+            </Link>
               <button className="w-full text-left p-3 rounded-lg border hover:bg-accent transition-colors">
                 <p className="font-medium">Review Pending Campaigns</p>
                 <p className="text-sm text-muted-foreground">

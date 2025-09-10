@@ -1,4 +1,5 @@
 // App.tsx
+
 import './App.css'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
@@ -11,11 +12,12 @@ import CampaignsTable from './pages/dashboard/campaigns';
 import WithdrawPage from './pages/dashboard/WithdrawPage';
 import PaymentSuccess from './pages/PaymentSuccess';
 import CampaignUpdatesPage from './pages/dashboard/updates';
+import VerificationPage from './pages/dashboard/VerificationPage'; // Add this line
 import { Toaster } from "@/components/ui/sonner";
 import { useLenis } from "./hooks/lenis";
 
 function App() {
-  useLenis(); 
+  useLenis();
 
   return (
     <BrowserRouter>
@@ -30,6 +32,7 @@ function App() {
         <Route path="/dashboard/withdraw" element={<WithdrawPage />} />
         <Route path='/payment-success' element={<PaymentSuccess />} />
         <Route path="/dashboard/updates" element={<CampaignUpdatesPage />} />
+        <Route path="/dashboard/verification" element={<VerificationPage />} /> {/* Add this line */}
        </Routes>
       <Toaster />
     </BrowserRouter>

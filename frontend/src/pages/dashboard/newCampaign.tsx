@@ -1,12 +1,13 @@
+// pages/dashboard/newCampaign.tsx
 "use client"
 
 import type React from "react"
 
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom" // Add Link
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { CalendarIcon, ImagePlus, Loader2, X } from "lucide-react"
+import { CalendarIcon, ImagePlus, Loader2, X, XCircle } from "lucide-react" // Add XCircle
 import { format } from "date-fns"
 import * as z from "zod"
 import { useCurrentUser } from "@/hooks/useCurrentUser"
@@ -22,6 +23,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Switch } from "@/components/ui/switch"
 import { Card, CardContent } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert" // Import Alert components
+import { buttonVariants } from "@/components/ui/button" // Import buttonVariants
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"]
@@ -57,7 +60,7 @@ export default function NewCampaignPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // In a real app, you would get this from authentication
-  const { user } = useCurrentUser();
+  const { user, loading: userLoading } = useCurrentUser();
 
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -121,76 +124,46 @@ export default function NewCampaignPage() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
-    const currentUserId = user?._id; // Type is string | undefined
+    const currentUserId = user?._id;
  
-    // --- ADD THIS CHECK ---
     if (!currentUserId) {
-      // Handle the case where the user ID is missing
       console.error("onSubmit Error: currentUserId is missing.", user);
       alert("Could not create campaign: User information is missing. Please ensure you are logged in.");
-      setIsSubmitting(false); // Stop the loading indicator
-      return; // IMPORTANT: Stop the function execution
+      setIsSubmitting(false);
+      return;
     }
-    // --- END CHECK ---
- 
-    // If the code reaches here, TypeScript knows (or should know)
-    // currentUserId is a string because the function would have returned otherwise.
-    // However, we add '!' below for certainty within the try block.
- 
+    
     try {
-      // If recurring, set goalAmount and deadline to null
       if (values.isRecurring) {
         values.goalAmount = null;
         values.deadline = null;
       }
  
-      // Create a FormData object
       const formData = new FormData();
- 
-      // Append fields, renaming keys where necessary.
-      // --- ADD '!' HERE ---
-      formData.append("creatorId", currentUserId!); // Assert that it's not null/undefined
-      // ---
+      formData.append("creatorId", currentUserId);
       formData.append("title", values.title);
       formData.append("description", values.description);
       formData.append("category", values.category);
- 
-      // The backend expects "goalamt" (lowercase, no camelCase)
       formData.append("goalamt", values.goalAmount ? values.goalAmount.toString() : "");
- 
-      // The backend expects a date in a format that JavaScript Date can parse.
       formData.append("deadline", values.deadline ? new Date(values.deadline).toISOString() : "");
- 
-      // Boolean as string
       formData.append("isRecurring", values.isRecurring.toString());
- 
       formData.append("story", values.story);
- 
-      // Append image files if any. (Key must be "images" since backend does req.files)
       images.forEach((file) => {
         formData.append("images", file);
       });
  
-      // Debug: To verify your FormData keys (you can remove this for production)
-      // for (const pair of formData.entries()) {
-      //   console.log(pair[0] + ": " + pair[1]);
-      // }
- 
-      // Send the POST request to your backend
       const response = await fetch("http://localhost:5000/campaigns/create", {
         method: "POST",
-        credentials: "include", // Include session cookies, if needed
+        credentials: "include",
         body: formData,
       });
  
       const data = await response.json();
  
       if (data.success) {
-        // Redirect to the campaigns page
         alert("Campaign created successfully!");
-        // navigate("/dashboard/campaigns");
+        navigate("/dashboard/campaigns");
       } else {
-        // Log the specific error from the backend if available
         console.error("Error creating campaign:", data.message || data);
         alert(`Failed to create campaign: ${data.message || 'Unknown error'}`);
       }
@@ -201,7 +174,32 @@ export default function NewCampaignPage() {
       setIsSubmitting(false);
     }
   }
-  
+
+  // --- NEW CODE START ---
+  if (userLoading) {
+    return (
+      <DashboardShell>
+        <DashboardHeader heading="Create New Campaign" text="Loading..." />
+        <div className="text-center text-lg">Loading user data...</div>
+      </DashboardShell>
+    );
+  }
+
+  if (!user || !user.isVerified) {
+    return (
+      <DashboardShell>
+        <DashboardHeader heading="Create New Campaign" text="Fill out the form below to create a new fundraising campaign." />
+        <Alert variant="destructive">
+          <XCircle className="h-4 w-4" />
+          <AlertTitle>Action Blocked</AlertTitle>
+          <AlertDescription>
+            You must be a verified user to create a new campaign. Please <Link to="/dashboard/verification" className={buttonVariants({ variant: "link", className: "p-0 h-auto" })}>verify your account</Link> to continue.
+          </AlertDescription>
+        </Alert>
+      </DashboardShell>
+    );
+  }
+  // --- NEW CODE END ---
 
   return (
     <DashboardShell>
@@ -427,10 +425,6 @@ export default function NewCampaignPage() {
                   </FormItem>
                 )}
               />
-
-                {/* <input type="" {...form.register("userId")} value={user ? user._id : ""} /> */}
-
-
 
               <Button type="submit" className="w-full" disabled={isSubmitting}>
                 {isSubmitting ? (

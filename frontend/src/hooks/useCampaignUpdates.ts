@@ -1,4 +1,4 @@
-// In src/hooks/useCampaignUpdates.ts (or .js)
+// In src/hooks/useCampaignUpdates.ts
 
 import { useState, useEffect } from "react"
 import axios from "axios"
@@ -6,8 +6,8 @@ import axios from "axios"
 export interface CampaignUpdate {
   _id: string
   campaignId: string
-  title: string // ✅ Corrected: Expects 'title'
-  content: string // ✅ Added: Expects 'content'
+  title: string 
+  content: string
   image?: string
   createdAt: string
   updatedAt: string
@@ -40,16 +40,15 @@ export function useCampaignUpdates(campaignId: string) {
     }
   }
 
-  // ✅ Corrected: `postUpdate` now accepts `title` and `content`
   const postUpdate = async (title: string, content: string, imageFile?: File) => {
-    if (!title.trim() || !content.trim()) return false // Basic validation
+    if (!title.trim() || !content.trim()) return false
 
     try {
       setPosting(true)
 
       const formData = new FormData()
-      formData.append("title", title)       // ✅ Appending 'title'
-      formData.append("content", content)   // ✅ Appending 'content'
+      formData.append("title", title) 
+      formData.append("content", content) 
       if (imageFile) {
         formData.append("image", imageFile)
       }
@@ -93,7 +92,7 @@ export function useCampaignUpdates(campaignId: string) {
     loading,
     posting,
     error,
-    postUpdate, // Ensure this is exported if you plan to use it elsewhere
+    postUpdate,
     refetch: fetchUpdates,
   }
 }

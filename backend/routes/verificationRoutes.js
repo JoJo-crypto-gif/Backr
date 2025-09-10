@@ -5,6 +5,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const User = require('../models/user');
+const { adminAuth } = require('../middleware/adminAuth');
 
 // Configure multer specifically for Ghana Card image uploads
 const storage = multer.diskStorage({

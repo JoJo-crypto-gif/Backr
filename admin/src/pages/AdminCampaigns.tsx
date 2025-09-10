@@ -319,23 +319,6 @@ const AdminCampaigns = () => {
                         </div>
                       </div>
                     </TableCell>
-                    {/* <TableCell>
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between text-sm">
-                          <span>{formatCurrency(campaign.raisedAmount)}</span>
-                          <span className="text-muted-foreground">of {formatCurrency(campaign.goalAmount)}</span>
-                        </div>
-                        <div className="w-full bg-muted rounded-full h-2">
-                          <div 
-                            className="bg-primary h-2 rounded-full transition-all"
-                            style={{ width: `${getProgress(campaign.raisedAmount, campaign.goalAmount)}%` }}
-                          />
-                        </div>
-                        <p className="text-xs text-muted-foreground">
-                          {getProgress(campaign.raisedAmount, campaign.goalAmount)}% funded
-                        </p>
-                      </div>
-                    </TableCell> */}
                     <TableCell>
                       {getStatusBadge(campaign.status)}
                     </TableCell>

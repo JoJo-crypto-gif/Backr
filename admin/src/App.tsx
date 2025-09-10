@@ -10,6 +10,7 @@ import AdminLayout from "./pages/AdminLayout";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminUsers from "./pages/AdminUsers";
 import AdminCampaigns from "./pages/AdminCampaigns";
+import AdminVerification from './pages/AdminVerification';
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="users" element={<AdminUsers />} />
             <Route path="campaigns" element={<AdminCampaigns />} />
+            <Route path="/admin/verification" element={<AdminVerification />} /> 
           </Route>
           
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

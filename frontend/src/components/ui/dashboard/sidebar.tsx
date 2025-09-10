@@ -1,10 +1,10 @@
-"use client"
+// components/dashboard/sidebar.tsx
 
 import { useLocation } from "react-router-dom"
 import { Link } from "react-router-dom"
 import { useCurrentUser } from "@/hooks/useCurrentUser"
 
-import { BookText, Home, Package, Settings, Search, Bell, User, CirclePlus } from "lucide-react"
+import { BookText, Home, Package, Settings, Search, Bell, User, CirclePlus, BadgeCheck } from "lucide-react" // Add BadgeCheck
 
 import {
   Sidebar,
@@ -42,26 +42,6 @@ const navigationItems = [
     icon: BookText,
     href: "/dashboard/campaigns",
   },
-  // {
-  //   title: "Customers",
-  //   icon: Users,
-  //   href: "/dashboard/customers",
-  // },
-  // {
-  //   title: "Products",
-  //   icon: Package,
-  //   href: "/dashboard/products",
-  // },
-  // {
-  //   title: "Billing",
-  //   icon: CreditCard,
-  //   href: "/dashboard/billing",
-  // },
-  // {
-  //   title: "Settings",
-  //   icon: Settings,
-  //   href: "/dashboard/settings",
-  // },
 ]
 
 export function DashboardSidebar() {
@@ -71,11 +51,13 @@ export function DashboardSidebar() {
   const baseURL = "http://localhost:5000"
 
   const avatarSrc = user?.avatar
-  ? `${baseURL}${user.avatar}` // assuming avatar is something like "uploads/avatar/xyz.jpg"
+  ? `${baseURL}${user.avatar}`
   : "/placeholder-user.jpg"
 
-const displayName = user?.name || "Guest"
+  const displayName = user?.name || "Guest"
 
+  const isVerified = user?.isVerified; // Get the user's verification status
+  const verificationStatus = user?.verificationStatus; // Get the detailed status
 
   return (
     <Sidebar className="bg-gray-100 p-1">
@@ -130,21 +112,32 @@ const displayName = user?.name || "Guest"
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              {/* New item for verification - only show if not verified */}
+              {isVerified === false && (
+                <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={pathname === '/dashboard/verification'} tooltip="Verify Account">
+                        <Link to="/dashboard/verification">
+                          <BadgeCheck className="h-5 w-5" />
+                          <span>Verify Account</span>
+                        </Link>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
         <button type="button" className="block border w-4/5 m-auto ml-3.5 mr-3.5 h-[50px] p-3 text-white bg-gray-700 rounded-xl justify-items-center cursor-pointer hover:bg-gray-900 transition-all duration-300">
-                    <Link to="/dashboard/new-campaign" className="flex">
-                    <CirclePlus className="h-6 w-4 mr-1" />
-                    New campaign
-                    </Link>
-          </button>
-          <button type="button" className="block border w-4/5 m-auto ml-3.5 mr-3.5 h-[50px] p-3 text-white bg-blue-900 rounded-xl justify-items-center cursor-pointer hover:bg-gray-900 transition-all duration-300">
-                    <Link to="/dashboard/withdraw" className="flex">
-                    <CirclePlus className="h-6 w-4 mr-1" />
-                    Withdraw Cash
-                    </Link>
-          </button>
+          <Link to="/dashboard/new-campaign" className="flex">
+            <CirclePlus className="h-6 w-4 mr-1" />
+            New campaign
+          </Link>
+        </button>
+        <button type="button" className="block border w-4/5 m-auto ml-3.5 mr-3.5 h-[50px] p-3 text-white bg-blue-900 rounded-xl justify-items-center cursor-pointer hover:bg-gray-900 transition-all duration-300">
+          <Link to="/dashboard/withdraw" className="flex">
+            <CirclePlus className="h-6 w-4 mr-1" />
+            Withdraw Cash
+          </Link>
+        </button>
       </SidebarContent>
       <SidebarFooter className="hidden md:block">
         <SidebarMenu>
