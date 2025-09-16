@@ -106,7 +106,7 @@ export default function DashboardPage() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">35</div> {/* Placeholder */}
+            <div className="text-2xl font-bold">0</div> {/* Placeholder */}
           </CardContent>
         </Card>
         <Card>
@@ -115,7 +115,7 @@ export default function DashboardPage() {
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">4</div> {/* Placeholder */}
+            <div className="text-2xl font-bold">0</div> {/* Placeholder */}
             <p className="text-xs text-muted-foreground">Active Campaigns</p>
           </CardContent>
         </Card>

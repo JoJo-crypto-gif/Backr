@@ -46,7 +46,7 @@ export default function VerificationPage() {
       if (response.ok) {
         toast.success(result.message);
         refetchUser(); // Refresh user data to update the UI
-        navigate('/dashboard'); // Redirect to dashboard
+        navigate('/dashboard');
       } else {
         toast.error(result.message || 'An error occurred.');
       }

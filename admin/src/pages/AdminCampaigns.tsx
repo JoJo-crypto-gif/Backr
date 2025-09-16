@@ -248,7 +248,6 @@ const AdminCampaigns = () => {
         </Card>
       </div>
 
-      {/* Search and Filter */}
       <Card>
         <CardHeader>
           <CardTitle>Campaign Directory</CardTitle>
@@ -285,7 +284,6 @@ const AdminCampaigns = () => {
                 <TableRow>
                   <TableHead>Campaign</TableHead>
                   <TableHead>Creator</TableHead>
-                  {/* <TableHead>Goal & Progress</TableHead> */}
                   <TableHead>Status</TableHead>
                   <TableHead>End Date</TableHead>
                   <TableHead>Actions</TableHead>

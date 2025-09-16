@@ -199,7 +199,6 @@ export default function NewCampaignPage() {
       </DashboardShell>
     );
   }
-  // --- NEW CODE END ---
 
   return (
     <DashboardShell>
